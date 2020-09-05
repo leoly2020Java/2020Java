@@ -8,4 +8,10 @@
     <string name="Exercise1">Exercise1:此界面包含RecyclerView中的新闻概要，点击可以看新闻详情</string>
     <string name="Exercise2">Exercise2:此界面包含LinearLayout中的疫情数据、疫情图谱、新闻聚类、知疫学者</string>
     <string name="Exercise3">Exercise3:此界面包含LinearLayout中的历史记录、本地新闻</string>
+    <string name="VirusData">疫情数据</string>
+    <string name="VirusAtlas">疫情图谱</string>
+    <string name="NewsCluster">新闻聚类</string>
+    <string name="VirusScholar">知疫学者</string>
+    <string name="History">历史记录</string>
+    <string name="LocalNews">本地新闻</string>
 </resources>
