@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">liuyun</string>
+    <string name="Home">主页</string>
+    <string name="VirusInformation">疫情信息</string>
+    <string name="Person">个人</string>
+    <string name="MenuClassification">分类列表</string>
+    <string name="MenuSearch">搜索</string>
+</resources>
