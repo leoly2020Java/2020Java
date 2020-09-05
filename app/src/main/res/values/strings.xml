@@ -1,8 +1,11 @@
 <resources>
-    <string name="app_name">liuyun</string>
+    <string name="app_name">VirusNews</string>
     <string name="Home">主页</string>
     <string name="VirusInformation">疫情信息</string>
     <string name="Person">个人</string>
     <string name="MenuClassification">分类列表</string>
     <string name="MenuSearch">搜索</string>
+    <string name="Exercise1">Exercise1:此界面包含RecyclerView中的新闻概要，点击可以看新闻详情</string>
+    <string name="Exercise2">Exercise2:此界面包含LinearLayout中的疫情数据、疫情图谱、新闻聚类、知疫学者</string>
+    <string name="Exercise3">Exercise3:此界面包含LinearLayout中的历史记录、本地新闻</string>
 </resources>

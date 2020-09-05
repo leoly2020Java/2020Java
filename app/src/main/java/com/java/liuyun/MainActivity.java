@@ -2,6 +2,8 @@ package com.java.liuyun;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,11 +14,18 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView navigationView;
     private MainViewPager mainViewPager;
     private int[] fragmentId = {0, 1, 2}; //底部导航栏每个元素给一个编号
+    private FragmentHome fragmentHome;
+    private FragmentVirusInformation fragmentVirusInformation;
+    private FragmentPerson fragmentPerson;
+    private List<Fragment> fragmentList;
 
     public MainActivity() {
         super();
@@ -27,13 +36,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //加载底部三个Fragment
+        fragmentHome = new FragmentHome();
+        fragmentVirusInformation = new FragmentVirusInformation();
+        fragmentPerson = new FragmentPerson();
+        fragmentList = new ArrayList<>();
+        fragmentList.add(fragmentHome);
+        fragmentList.add(fragmentVirusInformation);
+        fragmentList.add(fragmentPerson);
+        FragmentManager fragmentManager= getSupportFragmentManager();
+        MainFragmentPagerAdapter mainFragmentPagerAdapter = new MainFragmentPagerAdapter(fragmentList, fragmentManager);
+
         //处理主界面（一个MainViewPager）
         mainViewPager = (MainViewPager)findViewById(R.id.mainViewPager);
         mainViewPager.setActivity(this);
-        //没有SetAdapter!!!
+        mainViewPager.setAdapter(mainFragmentPagerAdapter);
         mainViewPager.setCurrentItem(fragmentId[0]);
 
         //处理底部导航栏
+        final MainActivity mainActivity = this;
         navigationView = findViewById(R.id.navView);
         navigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -53,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), "222 "+fragmentId[2]+mainViewPager.getCurrentItem(), Toast.LENGTH_SHORT).show(); //Debug
                                 break;
                         }
+                        mainActivity.invalidateOptionsMenu(); //调用onPrepareOptionsMenu，实现动态修改上边栏
                         return true;
                     }
                 }
