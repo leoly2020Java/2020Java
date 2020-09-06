@@ -5,7 +5,6 @@ import android.os.Message;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.litepal.LitePal;
-import org.litepal.crud.LitePalSupport;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -16,15 +15,20 @@ import java.util.Date;
 
 public class NewsListRetrieverThread extends Thread{
 
-    public void getNews()
+    public void run()
+    {
+
+    }
+
+    public void getmoreNews(int moreAmount)
     {
         try{
-            boolean moreNews = true;
-            String urlHeader = "https://covid-dashboard.aminer.cn/api/events/list?page=";
-            int page = 1;
-            while(moreNews)
+            int newsCount = LitePal.count(NewsAbstractObject.class);
+            int pageSize = 12;
+            String urlHeader = "https://covid-dashboard.aminer.cn/api/events/list?size=" + pageSize + "&page=";
+            int page = (newsCount + 1) / pageSize;
+            while(moreAmount != 0)
             {
-                moreNews = false;
                 URL url = new URL(urlHeader + page);
                 page++;
                 HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
@@ -42,30 +46,35 @@ public class NewsListRetrieverThread extends Thread{
                 inputStream.close();
                 JSONObject json = new JSONObject(stringBuffer.toString());
                 JSONArray jsonArray = json.getJSONArray("data");
-                if (jsonArray.length() > 0)
+                for (int i = 0; i < jsonArray.length(); i++)
                 {
-                    moreNews = true;
-                    for (int i = 0; i < jsonArray.length(); i++)
+                    JSONObject jsonNews = jsonArray.getJSONObject(i);
+                    NewsAbstractObject newsAbstractObject = new NewsAbstractObject();
+                    newsAbstractObject.parseJSON(jsonNews);
+                    if (LitePal.where("NewsID = " + newsAbstractObject.getNewsID()).find(NewsAbstractObject.class) == null)
                     {
-                        JSONObject jsonNews = jsonArray.getJSONObject(i);
-                        NewsAbstractObject newsAbstractObject = new NewsAbstractObject();
-                        newsAbstractObject.parseJSON(jsonNews);
                         newsAbstractObject.save();
+                        moreAmount--;
+                        if (moreAmount == 0)
+                        {
+                            break;
+                        }
                     }
                 }
             }
+            LitePal.order("publishTime desc").find(NewsAbstractObject.class);
         }catch(Exception ignored){}
     }
 
-    public void getNews(Date currentLatest)
+    public void getLatestNews(Date currentLatest)
     {
         try{
-            boolean moreNews = true;
-            String urlHeader = "https://covid-dashboard.aminer.cn/api/events/list?page=";
+            int pageSize = 12;
+            String urlHeader = "https://covid-dashboard.aminer.cn/api/events/list?size=" + pageSize + "&page=";
             int page = 1;
+            boolean moreNews = true;
             while(moreNews)
             {
-                moreNews = false;
                 URL url = new URL(urlHeader + page);
                 page++;
                 HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
@@ -85,19 +94,24 @@ public class NewsListRetrieverThread extends Thread{
                 JSONArray jsonArray = json.getJSONArray("data");
                 if (jsonArray.length() > 0)
                 {
-                    moreNews = true;
                     for (int i = 0; i < jsonArray.length(); i++)
                     {
                         JSONObject jsonNews = jsonArray.getJSONObject(i);
                         NewsAbstractObject newsAbstractObject = new NewsAbstractObject();
                         newsAbstractObject.parseJSON(jsonNews);
-                        if (newsAbstractObject.getPublishTime().after(currentLatest))
+                        if (newsAbstractObject.getPublishTime().before(currentLatest))
+                        {
+                            moreNews = false;
+                            break;
+                        }
+                        if (LitePal.where("NewsID = " + newsAbstractObject.getNewsID()).find(NewsAbstractObject.class) == null)
                         {
                             newsAbstractObject.save();
                         }
                     }
                 }
             }
+            LitePal.order("publishTime desc").find(NewsAbstractObject.class);
         }catch(Exception ignored){}
     }
 }

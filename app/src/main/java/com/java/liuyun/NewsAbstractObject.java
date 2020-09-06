@@ -12,6 +12,15 @@ public class NewsAbstractObject extends LitePalSupport {
     String type;
     String title;
     Date publishTime;
+
+    public NewsObject getNewsObject() {
+        return newsObject;
+    }
+
+    public void setNewsObject(NewsObject newsObject) {
+        this.newsObject = newsObject;
+    }
+
     NewsObject newsObject = null;
 
     public String getNewsID() {
