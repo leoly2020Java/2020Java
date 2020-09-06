@@ -133,7 +133,7 @@ public class NewsObject extends LitePalSupport {
 
         try{
             String timeStr = jsonData.getString("date");
-            SimpleDateFormat ft = new SimpleDateFormat ("E, dd MM yyyy HH:mm:ss z", Locale.CHINA);
+            SimpleDateFormat ft = new SimpleDateFormat ("EEE, dd MMM yyyy HH:mm:ss z", Locale.CHINA);
             publishTime = ft.parse(timeStr);
         }catch (Exception e){
             publishTime = null;
