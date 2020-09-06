@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="search_view">
+        <attr name="TextSize" format="dimension"  />
+        <attr name="TextColor" format="color" />
+        <attr name="BlockHeight" format="integer" />
+        <attr name="BlockColor" format="color" />
+        <attr name="BlockHint" format="string" />
+    </declare-styleable>
+</resources>
