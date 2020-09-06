@@ -73,8 +73,8 @@ public class NewsAbstractObject extends LitePalSupport {
         }
 
         try{
-            String timeStr = jsonData.getString("time");
-            SimpleDateFormat ft = new SimpleDateFormat ("yyyy/MM/dd", Locale.CHINA);
+            String timeStr = jsonData.getString("date");
+            SimpleDateFormat ft = new SimpleDateFormat ("E, dd MM yyyy HH:mm:ss z", Locale.CHINA);
             publishTime = ft.parse(timeStr);
         }catch (Exception e){
             publishTime = null;
