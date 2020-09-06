@@ -1,13 +1,13 @@
 package com.java.liuyun;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -26,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
     private FragmentVirusInformation fragmentVirusInformation;
     private FragmentPerson fragmentPerson;
     private List<Fragment> fragmentList;
+
+    int SEARCH_RESULT_CODE = 1;
 
     public MainActivity() {
         super();
@@ -122,9 +124,10 @@ public class MainActivity extends AppCompatActivity {
     //顶部菜单栏每个按钮对应的事件
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        Intent intent;
         switch (item.getItemId()) {
             case R.id.menu_search:
+                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                startActivityForResult(intent, SEARCH_RESULT_CODE);
                 break;
             case R.id.menu_classification:
                 break;
@@ -132,5 +135,16 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         return true;
+    }
+
+    //处理其它Activity（搜索，修改分类列表）的返回结果
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (data == null) return;
+        if (requestCode == SEARCH_RESULT_CODE) {
+            String keyWord = data.getStringExtra("KeyWord");
+            Toast.makeText(getApplicationContext(), "search: "+keyWord, Toast.LENGTH_SHORT).show(); //Debug
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

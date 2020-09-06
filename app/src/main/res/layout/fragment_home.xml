@@ -10,7 +10,8 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/Exercise1" />
+        android:text="@string/Exercise1"
+        android:textColor="#03A9F4" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"

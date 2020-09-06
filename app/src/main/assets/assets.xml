@@ -4,6 +4,5 @@
     <version value="1" />
     <list>
         <mapping class="com.java.liuyun.NewsObject" />
-        <mapping class="com.java.liuyun.NewsAbstractObject" />
     </list>
 </litepal>
