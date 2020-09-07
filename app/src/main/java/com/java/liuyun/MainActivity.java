@@ -158,11 +158,13 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == SEARCH_RESULT_CODE) {
             String keyWord = data.getStringExtra("KeyWord");
             Toast.makeText(getApplicationContext(), "search: "+keyWord, Toast.LENGTH_SHORT).show(); //Debug
+            fragmentHome.setKeyWord(keyWord);
         }
         if (requestCode == CATEGORY_RESULT_CODE) {
             categoryAddList = data.getStringArrayListExtra("AddList");
             categoryDeleteList = data.getStringArrayListExtra("DeleteList");
             Toast.makeText(getApplicationContext(), "category finish: "+categoryAddList.size()+" "+categoryDeleteList.size(), Toast.LENGTH_SHORT).show(); //Debug
+            fragmentHome.setCategoryItemList(categoryAddList);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

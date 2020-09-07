@@ -38,11 +38,9 @@ public class NewsContentRetrieverThread extends Thread {
             JSONObject jsonNews = json.getJSONObject("data");
             NewsObject newsObject = new NewsObject();
             newsObject.parseJSON(jsonNews);
-            newsAbstractObject.setNewsObject(newsObject);
             newsObject.save();
-            newsAbstractObject.save();
+            newsAbstractObject.setNewsObject(newsObject);
         }catch(Exception ignored){}
-
 
     }
 }
