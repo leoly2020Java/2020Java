@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,9 +29,17 @@ public class MainActivity extends AppCompatActivity {
     private List<Fragment> fragmentList;
 
     int SEARCH_RESULT_CODE = 1;
+    int CATEGORY_RESULT_CODE = 2;
+
+    //分类标签列表
+    private List<String> categoryAddList, categoryDeleteList;
 
     public MainActivity() {
         super();
+        categoryAddList = new ArrayList<>();
+        categoryDeleteList = new ArrayList<>();
+        categoryAddList.add("news");
+        categoryAddList.add("paper");
     }
 
     @Override
@@ -124,12 +133,17 @@ public class MainActivity extends AppCompatActivity {
     //顶部菜单栏每个按钮对应的事件
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Intent intent;
         switch (item.getItemId()) {
             case R.id.menu_search:
-                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                intent = new Intent(MainActivity.this, SearchActivity.class);
                 startActivityForResult(intent, SEARCH_RESULT_CODE);
                 break;
             case R.id.menu_classification:
+                intent = new Intent(MainActivity.this, CategoryActivity.class);
+                intent.putExtra("AddList", (Serializable) categoryAddList);
+                intent.putExtra("DeleteList", (Serializable) categoryDeleteList);
+                startActivityForResult(intent, CATEGORY_RESULT_CODE);
                 break;
             default:
                 break;
@@ -144,6 +158,11 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == SEARCH_RESULT_CODE) {
             String keyWord = data.getStringExtra("KeyWord");
             Toast.makeText(getApplicationContext(), "search: "+keyWord, Toast.LENGTH_SHORT).show(); //Debug
+        }
+        if (requestCode == CATEGORY_RESULT_CODE) {
+            categoryAddList = data.getStringArrayListExtra("AddList");
+            categoryDeleteList = data.getStringArrayListExtra("DeleteList");
+            Toast.makeText(getApplicationContext(), "category finish: "+categoryAddList.size()+" "+categoryDeleteList.size(), Toast.LENGTH_SHORT).show(); //Debug
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

@@ -16,4 +16,8 @@
     <string name="LocalNews">本地新闻</string>
     <string name="Back">返回</string>
     <string name="ClearSearch">清除搜索记录</string>
+    <string name="CategoryItem">分类标签</string>
+    <string name="AdditionItem">我的分类</string>
+    <string name="DeletionItem">其它分类</string>
+    <string name="Confirm">确定</string>
 </resources>

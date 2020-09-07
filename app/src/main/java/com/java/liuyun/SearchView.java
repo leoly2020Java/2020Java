@@ -68,7 +68,7 @@ public class SearchView extends LinearLayout {
         textColor = typedArray.getColor(R.styleable.search_view_TextColor, context.getColor(R.color.Grey));
         blockHeight = typedArray.getInteger(R.styleable.search_view_BlockHeight, 150);
         blockColor = typedArray.getColor(R.styleable.search_view_BlockColor, context.getColor(R.color.White));
-        blockHint =typedArray.getString(R.styleable.search_view_BlockHint);
+        blockHint = typedArray.getString(R.styleable.search_view_BlockHint);
         typedArray.recycle();
     }
     //初始化视图
