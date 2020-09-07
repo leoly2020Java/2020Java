@@ -12,6 +12,10 @@
         android:theme="@style/AppTheme">
         <activity android:name=".SearchActivity" />
         <activity android:name=".CategoryActivity" />
+        <activity android:name=".VirusDataActivity" />
+        <activity android:name=".VirusAtlasActivity" />
+        <activity android:name=".NewsClusterActivity" />
+        <activity android:name=".VirusScholarActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

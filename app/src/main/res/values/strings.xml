@@ -2,7 +2,7 @@
     <string name="app_name">VirusNews</string>
     <string name="Home">主页</string>
     <string name="VirusInformation">疫情信息</string>
-    <string name="Person">个人</string>
+    <string name="Person">本地新闻</string>
     <string name="MenuClassification">分类列表</string>
     <string name="MenuSearch">搜索</string>
     <string name="Exercise1">Exercise1:此界面包含RecyclerView中的新闻概要，点击可以看新闻详情</string>
@@ -20,4 +20,6 @@
     <string name="AdditionItem">我的分类</string>
     <string name="DeletionItem">其它分类</string>
     <string name="Confirm">确定</string>
+    <string name="WorldVirusData">世界疫情数据统计</string>
+    <string name="ChinaVirusData">全国疫情数据统计</string>
 </resources>

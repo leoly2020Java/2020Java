@@ -5,26 +5,4 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:background="@drawable/ic_launcher_foreground"
-    android:padding="100dp">
-
-    <Button
-        android:id="@+id/history_button"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/History"
-        android:textColor="#03A9F4"
-        android:textSize="24sp"
-        android:textStyle="bold" />
-
-    <Button
-        android:id="@+id/local_news_button"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/LocalNews"
-        android:textColor="#E91E63"
-        android:textSize="24sp"
-        android:textStyle="bold" />
-</androidx.appcompat.widget.LinearLayoutCompat>
+    android:padding="100dp" />
