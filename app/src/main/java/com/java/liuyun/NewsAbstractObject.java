@@ -12,16 +12,15 @@ public class NewsAbstractObject extends LitePalSupport {
     String type;
     String title;
     Date publishTime;
+    NewsObject detailNews;
 
-    public NewsObject getNewsObject() {
-        return newsObject;
+    public NewsObject getDetailNews() {
+        return detailNews;
     }
 
-    public void setNewsObject(NewsObject newsObject) {
-        this.newsObject = newsObject;
+    public void setDetailNews(NewsObject detailNews) {
+        this.detailNews = detailNews;
     }
-
-    NewsObject newsObject = null;
 
     public String getNewsID() {
         return newsID;
@@ -58,7 +57,6 @@ public class NewsAbstractObject extends LitePalSupport {
     public NewsAbstractObject()
     {
         super();
-
     }
 
     void parseJSON(JSONObject jsonData)
@@ -91,4 +89,23 @@ public class NewsAbstractObject extends LitePalSupport {
 
     }
 
+}
+
+class SortByTimeDesc implements Comparator<NewsAbstractObject>
+{
+    public int compare(NewsAbstractObject a, NewsAbstractObject b)
+    {
+        if (a.getPublishTime().before(b.getPublishTime()))
+        {
+            return 1;
+        }
+        else if (a.getPublishTime().after(b.getPublishTime()))
+        {
+            return -1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
 }

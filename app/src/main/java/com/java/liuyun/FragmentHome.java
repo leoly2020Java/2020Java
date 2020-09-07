@@ -11,14 +11,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 
+import org.litepal.LitePal;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class FragmentHome extends Fragment {
 
-    public int page; //当前加载了page页新闻（上拉page-1次）
-    public List<NewsObject> newsList; //【重要】新闻列表
+    public List<NewsAbstractObject> newsList;
 
     public List<String> categoryItemList;
     public String keyWord;
@@ -27,17 +29,13 @@ public class FragmentHome extends Fragment {
     public RecyclerView recyclerView;
 
     public FragmentHome() {
-        page = 1;
-        newsList = Collections.synchronizedList(new ArrayList<NewsObject>());
+        newsList = Collections.synchronizedList(new ArrayList<NewsAbstractObject>());
         categoryItemList = new ArrayList<>();
         categoryItemList.add("news");
         categoryItemList.add("paper");
         keyWord = "";
     }
 
-    public void setPage(int page) {
-        this.page = page;
-    }
     public void setCategoryItemList(List<String> categoryItemList) {
         this.categoryItemList = categoryItemList;
         refresh();
@@ -61,28 +59,51 @@ public class FragmentHome extends Fragment {
      keyWord是用户查询的关键字，例如“病毒”
      TODO:Adapter类用于把多个类包装成一个List，并处理点击这个List里面的元素发生的事件
      TODO:实现一个Adapter类，维护一个List<NewsObject>，Adapter类内部维护点击新闻对应的跳转事件，跳转至TextActivity类，跳转时传入新闻的标题、时间、来源、正文内容或URL，在TextActivity类里面画个xml显示这些内容
-     TODO:完成flush()函数，表示重置本页面（类似于刚打开APP时做的事情，从第1页开始重新加载）
-     TODO:类似地完成loadMore()函数
      TODO:完成本类的onCreateView函数，实现twinklingRefreshLayout的setOnRefreshListener函数（维护出上拉和下拉对应的事件）
      */
 
     public void flush() {
-        //重新开始加载第1页新闻
-        setPage(1);
+        int pageSize = 12;
         newsList.clear();
-
-        //根据categoryItemList和keyWord，查询一定条数的新闻（例如12条）
-        //得到新的newsList，长度为12
-        //其它要做的事情...
-
+        NewsListUpdaterThread newsListUpdaterThread = new NewsListUpdaterThread();
+        newsListUpdaterThread.start();
+        try{
+            newsListUpdaterThread.join();
+            newsList.addAll(LitePal.where("title like ? and type in (?)", "%" + keyWord + "%", "\"" + String.join("\",\"", categoryItemList) + "\"")
+                    .order("publishTime desc").limit(pageSize).find(NewsAbstractObject.class));
+            newsList.sort(new SortByTimeDesc());
+        }catch(Exception ignored){}
+        if (newsList.size() < pageSize)
+        {
+            long earliestInList = newsList.get(newsList.size() - 1).getPublishTime().getTime();
+            NewsListRetrieverThread newsListRetrieverThread = new NewsListRetrieverThread();
+            newsListRetrieverThread.start();
+            try{
+                newsListRetrieverThread.join();
+                newsList.addAll(LitePal.where("publishTime < ? and title like ? and type in (?)", Long.toString(earliestInList), "%" + keyWord + "%", "\"" + String.join("\",\"", categoryItemList) + "\"")
+                        .order("publishTime desc").limit(pageSize - newsList.size()).find(NewsAbstractObject.class));
+            }catch(Exception ignored){}
+        }
     }
 
     public void loadMore() {
-        setPage(this.page + 1);
-
-        //再加载12条新闻，更新newsList
-        //其它要做的事情...
-
+        int pageSize = 12;
+        long earliestInList = newsList.get(newsList.size() - 1).getPublishTime().getTime();
+        newsList.addAll(LitePal.where("publishTime < ? and title like ? and type in (?)", Long.toString(earliestInList), "%" + keyWord + "%", "\"" + String.join("\",\"", categoryItemList) + "\"")
+                .limit(pageSize).find(NewsAbstractObject.class));
+        newsList.sort(new SortByTimeDesc());
+        if (newsList.size() < pageSize)
+        {
+            NewsListRetrieverThread newsListRetrieverThread = new NewsListRetrieverThread();
+            newsListRetrieverThread.start();
+            try{
+                newsListRetrieverThread.join();
+                earliestInList = newsList.get(newsList.size() - 1).getPublishTime().getTime();
+                newsList.addAll(LitePal.where("publishTime < ? and title like ? and type in (?)", Long.toString(earliestInList), "%" + keyWord + "%", "\"" + String.join("\",\"", categoryItemList) + "\"")
+                        .order("publishTime desc").limit(pageSize - newsList.size()).find(NewsAbstractObject.class));
+                newsList.sort(new SortByTimeDesc());
+            }catch(Exception ignored){}
+        }
     }
 
     @Override
