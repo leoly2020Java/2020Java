@@ -22,7 +22,7 @@ public class NewsListUpdaterThread extends Thread{
         }
         else
         {
-            getInitNews(300);
+            getInitNews(200);
         }
     }
 

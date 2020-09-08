@@ -89,13 +89,11 @@ public class FragmentHome extends Fragment {
             newsListRetrieverThread.start();
             try{
                 newsListRetrieverThread.join();
-                System.out.println("join retriever complete");
                 newsList.addAll(LitePal.where("title like ?", "%" + keyWord + "%")
                         .order("publishTime desc").limit(pageSize).find(NewsAbstractObject.class));
                 //newsList.addAll(LitePal.where("title like ? and type in (?)", "%" + keyWord + "%", "\"" + String.join("\",\"", categoryItemList) + "\"")
                         //.order("publishTime desc").limit(pageSize).find(NewsAbstractObject.class));
                 newsList.sort(new SortByTimeDesc());
-                System.out.println("second add to news list complete");
             }catch(Exception e){
                 e.printStackTrace();
             }

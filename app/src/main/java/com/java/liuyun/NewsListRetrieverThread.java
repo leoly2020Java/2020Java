@@ -17,11 +17,11 @@ public class NewsListRetrieverThread extends Thread{
         int newsCount = LitePal.count(NewsAbstractObject.class);
         if (newsCount > 0)
         {
-            getMoreNews(300);
+            getMoreNews(200);
         }
         else
         {
-            getInitNews(300);
+            getInitNews(200);
         }
     }
 
@@ -64,7 +64,7 @@ public class NewsListRetrieverThread extends Thread{
     {
         try{
             int newsCount = LitePal.count(NewsAbstractObject.class);
-            int pageSize = 20;
+            int pageSize = 200;
             String urlHeader = "https://covid-dashboard.aminer.cn/api/events/list?size=" + pageSize + "&page=";
             int page = (newsCount + 1) / pageSize;
             while(moreAmount != 0)
@@ -91,7 +91,7 @@ public class NewsListRetrieverThread extends Thread{
                     JSONObject jsonNews = jsonArray.getJSONObject(i);
                     NewsAbstractObject newsAbstractObject = new NewsAbstractObject();
                     newsAbstractObject.parseJSON(jsonNews);
-                    if (LitePal.where("newsID = ?", newsAbstractObject.getNewsID()).find(NewsAbstractObject.class) == null)
+                    if (LitePal.where("newsID = ?", newsAbstractObject.getNewsID()).find(NewsAbstractObject.class).size() == 0)
                     {
                         NewsObject newsObject = new NewsObject();
                         newsAbstractObject.setDetailNews(newsObject);
