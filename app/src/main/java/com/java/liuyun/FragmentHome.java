@@ -117,13 +117,18 @@ public class FragmentHome extends Fragment {
 
     public void loadMore() {
         int pageSize = 12;
-
+        int origSize = newsList.size();
+        if (origSize == 0)
+        {
+            flush();
+            return;
+        }
 
         long earliestInList = newsList.get(newsList.size() - 1).getPublishTime().getTime();
         newsList.addAll(LitePal.where("publishTime < ? and title like ? and type in (?)", Long.toString(earliestInList), "%" + keyWord + "%", "\"" + String.join("\",\"", categoryItemList) + "\"")
                 .limit(pageSize).find(NewsAbstractObject.class));
         newsList.sort(new SortByTimeDesc());
-        if (newsList.size() < pageSize)
+        if (newsList.size() < origSize + pageSize)
         {
             NewsListRetrieverThread newsListRetrieverThread = new NewsListRetrieverThread();
             newsListRetrieverThread.start();
