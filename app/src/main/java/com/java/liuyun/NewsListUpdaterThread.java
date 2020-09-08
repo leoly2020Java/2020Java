@@ -15,13 +15,56 @@ public class NewsListUpdaterThread extends Thread{
 
     public void run()
     {
-        getLatestNews();
+        int newsCount = LitePal.count(NewsAbstractObject.class);
+        if (newsCount > 0)
+        {
+            getLatestNews();
+        }
+        else
+        {
+            getInitNews(300);
+        }
+    }
+
+    public void getInitNews(int moreAmount)
+    {
+        try{
+            String urlHeader = "https://covid-dashboard.aminer.cn/api/events/list?size=" + moreAmount + "&page=1";
+            URL url = new URL(urlHeader);
+            HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+            InputStream inputStream = httpURLConnection.getInputStream();
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            StringBuilder stringBuffer = new StringBuilder();
+            String line;
+            while((line = bufferedReader.readLine()) != null)
+            {
+                stringBuffer.append(line);
+            }
+            bufferedReader.close();
+            inputStreamReader.close();
+            inputStream.close();
+            JSONObject json = new JSONObject(stringBuffer.toString());
+            JSONArray jsonArray = json.getJSONArray("data");
+            for (int i = 0; i < jsonArray.length(); i++)
+            {
+                JSONObject jsonNews = jsonArray.getJSONObject(i);
+                NewsAbstractObject newsAbstractObject = new NewsAbstractObject();
+                newsAbstractObject.parseJSON(jsonNews);
+                NewsObject newsObject = new NewsObject();
+                newsAbstractObject.setDetailNews(newsObject);
+                newsObject.save();
+                newsAbstractObject.save();
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void getLatestNews()
     {
         try{
-            Date currentLatest = LitePal.findFirst(NewsAbstractObject.class).getPublishTime();
+            Date currentLatest = LitePal.order("publishTime desc").findFirst(NewsAbstractObject.class).getPublishTime();
             int pageSize = 12;
             String urlHeader = "https://covid-dashboard.aminer.cn/api/events/list?size=" + pageSize + "&page=";
             int page = 1;
@@ -57,7 +100,7 @@ public class NewsListUpdaterThread extends Thread{
                             moreNews = false;
                             break;
                         }
-                        if (LitePal.where("NewsID = " + newsAbstractObject.getNewsID()).find(NewsAbstractObject.class) == null)
+                        if (LitePal.where("newsID = ?", newsAbstractObject.getNewsID()).find(NewsAbstractObject.class) == null)
                         {
                             NewsObject newsObject = new NewsObject();
                             newsAbstractObject.setDetailNews(newsObject);
@@ -67,6 +110,8 @@ public class NewsListUpdaterThread extends Thread{
                     }
                 }
             }
-        }catch(Exception ignored){}
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 }

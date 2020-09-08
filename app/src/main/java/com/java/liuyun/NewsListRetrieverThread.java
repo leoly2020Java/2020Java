@@ -14,7 +14,50 @@ public class NewsListRetrieverThread extends Thread{
 
     public void run()
     {
-        getMoreNews(300);
+        int newsCount = LitePal.count(NewsAbstractObject.class);
+        if (newsCount > 0)
+        {
+            getMoreNews(300);
+        }
+        else
+        {
+            getInitNews(300);
+        }
+    }
+
+    public void getInitNews(int moreAmount)
+    {
+        try{
+            String urlHeader = "https://covid-dashboard.aminer.cn/api/events/list?size=" + moreAmount + "&page=1";
+            URL url = new URL(urlHeader);
+            HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+            InputStream inputStream = httpURLConnection.getInputStream();
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            StringBuilder stringBuffer = new StringBuilder();
+            String line;
+            while((line = bufferedReader.readLine()) != null)
+            {
+                stringBuffer.append(line);
+            }
+            bufferedReader.close();
+            inputStreamReader.close();
+            inputStream.close();
+            JSONObject json = new JSONObject(stringBuffer.toString());
+            JSONArray jsonArray = json.getJSONArray("data");
+            for (int i = 0; i < jsonArray.length(); i++)
+            {
+                JSONObject jsonNews = jsonArray.getJSONObject(i);
+                NewsAbstractObject newsAbstractObject = new NewsAbstractObject();
+                newsAbstractObject.parseJSON(jsonNews);
+                NewsObject newsObject = new NewsObject();
+                newsAbstractObject.setDetailNews(newsObject);
+                newsObject.save();
+                newsAbstractObject.save();
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void getMoreNews(int moreAmount)
@@ -48,7 +91,7 @@ public class NewsListRetrieverThread extends Thread{
                     JSONObject jsonNews = jsonArray.getJSONObject(i);
                     NewsAbstractObject newsAbstractObject = new NewsAbstractObject();
                     newsAbstractObject.parseJSON(jsonNews);
-                    if (LitePal.where("NewsID = " + newsAbstractObject.getNewsID()).find(NewsAbstractObject.class) == null)
+                    if (LitePal.where("newsID = ?", newsAbstractObject.getNewsID()).find(NewsAbstractObject.class) == null)
                     {
                         NewsObject newsObject = new NewsObject();
                         newsAbstractObject.setDetailNews(newsObject);
@@ -62,6 +105,8 @@ public class NewsListRetrieverThread extends Thread{
                     }
                 }
             }
-        }catch(Exception ignored){}
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 }
