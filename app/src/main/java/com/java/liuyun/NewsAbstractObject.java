@@ -4,6 +4,9 @@ import org.json.*;
 import org.litepal.crud.LitePalSupport;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class NewsAbstractObject extends LitePalSupport {
@@ -81,10 +84,11 @@ public class NewsAbstractObject extends LitePalSupport {
 
         try{
             String timeStr = jsonData.getString("date");
-            SimpleDateFormat ft = new SimpleDateFormat ("EEE, dd MMM yyyy HH:mm:ss z");
-            publishTime = ft.parse(timeStr);
+            LocalDateTime dt = LocalDateTime.parse(timeStr, DateTimeFormatter.RFC_1123_DATE_TIME);
+            publishTime = Date.from(dt.atZone(ZoneId.systemDefault()).toInstant());
         }catch (Exception e){
             publishTime = null;
+            e.printStackTrace();
         }
 
     }

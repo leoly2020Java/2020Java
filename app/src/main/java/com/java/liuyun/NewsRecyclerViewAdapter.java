@@ -34,6 +34,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         MainActivity mainActivity = (MainActivity)context;
         NewsViewHolder newsViewHolder = (NewsViewHolder) viewHolder;
         newsViewHolder.newsAbstractObject = newsList.get(position);
+        
         newsViewHolder.title.setText(newsViewHolder.newsAbstractObject.getTitle());
         newsViewHolder.title.setTextColor(context.getColor(R.color.Blue));
         //newsViewHolder.title.setOnClickListener(new View.OnClickListener(){});
