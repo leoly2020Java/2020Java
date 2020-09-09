@@ -15,10 +15,12 @@ public class NewsObject extends LitePalSupport {
     String newsID;
     String type;
     String title;
-    Date publishTime;
     String content;
+    Date publishTime;
     String source;
     String newsURL;
+    HashMap<String, String> entityMap;
+    ArrayList<String> relatedNewsID;
 
     public String getNewsID() {
         return newsID;
@@ -76,6 +78,22 @@ public class NewsObject extends LitePalSupport {
         this.newsURL = newsURL;
     }
 
+    public HashMap<String, String> getEntityMap() {
+        return entityMap;
+    }
+
+    public void setEntityMap(HashMap<String, String> entityMap) {
+        this.entityMap = entityMap;
+    }
+
+    public ArrayList<String> getRelatedNewsID() {
+        return relatedNewsID;
+    }
+
+    public void setRelatedNewsID(ArrayList<String> relatedNewsID) {
+        this.relatedNewsID = relatedNewsID;
+    }
+
     public NewsObject()
     {
         super();
@@ -126,6 +144,30 @@ public class NewsObject extends LitePalSupport {
             newsURL = jsonData.getString("url");
         }catch (Exception e){
             newsURL = "";
+        }
+
+        try{
+            entityMap = new HashMap<String, String>();
+            JSONArray entityArray = jsonData.getJSONArray("entities");
+            for (int i = 0; i < entityArray.length(); i++)
+            {
+                JSONObject entityWithURL = entityArray.getJSONObject(i);
+                entityMap.put(entityWithURL.getString("label"), entityWithURL.getString("url"));
+            }
+        }catch (Exception e) {
+            entityMap = new HashMap<String, String>();
+        }
+
+        try{
+            relatedNewsID = new ArrayList<String>();
+            JSONArray relatedNewsArray = jsonData.getJSONArray("related_events");
+            for (int i = 0; i < relatedNewsArray.length(); i++)
+            {
+                JSONObject relatedNewsWithScore = relatedNewsArray.getJSONObject(i);
+                relatedNewsID.add(relatedNewsWithScore.getString("id"));
+            }
+        }catch (Exception e) {
+            relatedNewsID = new ArrayList<String>();
         }
     }
 

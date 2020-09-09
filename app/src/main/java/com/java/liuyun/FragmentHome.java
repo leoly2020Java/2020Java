@@ -71,6 +71,7 @@ public class FragmentHome extends Fragment {
     public void flush() {
         int pageSize = 12;
         newsList.clear();
+        LitePal.deleteAll(NewsAbstractObject.class);
 
         NewsListUpdaterThread newsListUpdaterThread = new NewsListUpdaterThread();
         newsListUpdaterThread.start();

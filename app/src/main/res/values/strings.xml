@@ -22,4 +22,6 @@
     <string name="Confirm">确定</string>
     <string name="WorldVirusData">世界疫情数据统计</string>
     <string name="ChinaVirusData">全国疫情数据统计</string>
+    <string name="SearchVirusAtlas">疫情图谱查询</string>
+    <string name="Aoligei">奥利给</string>
 </resources>
