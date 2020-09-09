@@ -13,10 +13,10 @@ public class NewsObject extends LitePalSupport {
     String title;
     String content;
     Date publishTime;
-    String language;
     String source;
     String newsURL;
     HashMap<String, String> entityMap;
+    ArrayList<String> relatedNewsID;
 
     public String getNewsID() {
         return newsID;
@@ -58,14 +58,6 @@ public class NewsObject extends LitePalSupport {
         this.publishTime = publishTime;
     }
 
-    public String getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(String language) {
-        this.language = language;
-    }
-
     public String getSource() {
         return source;
     }
@@ -97,8 +89,6 @@ public class NewsObject extends LitePalSupport {
     public void setRelatedNewsID(ArrayList<String> relatedNewsID) {
         this.relatedNewsID = relatedNewsID;
     }
-
-    ArrayList<String> relatedNewsID;
 
     public NewsObject()
     {
@@ -137,12 +127,6 @@ public class NewsObject extends LitePalSupport {
             publishTime = ft.parse(timeStr);
         }catch (Exception e){
             publishTime = null;
-        }
-
-        try{
-            language = jsonData.getString("language");
-        }catch (Exception e){
-            language = "zh-CN";
         }
 
         try{

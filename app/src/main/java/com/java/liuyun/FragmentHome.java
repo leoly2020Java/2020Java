@@ -32,6 +32,7 @@ public class FragmentHome extends Fragment {
 
     public TwinklingRefreshLayout twinklingRefreshLayout;
     public RecyclerView recyclerView;
+    public NewsRecyclerViewAdapter adapter;
 
     public FragmentHome() {
         newsList = Collections.synchronizedList(new ArrayList<NewsAbstractObject>());
@@ -105,8 +106,10 @@ public class FragmentHome extends Fragment {
             newsListRetrieverThread.start();
             try{
                 newsListRetrieverThread.join();
-                newsList.addAll(LitePal.where("publishTime < ? and title like ? and type in (?)", Long.toString(earliestInList), "%" + keyWord + "%", "\"" + String.join("\",\"", categoryItemList) + "\"")
+                newsList.addAll(LitePal.where("publishTime < ? and title like ?", Long.toString(earliestInList), "%" + keyWord + "%")
                         .order("publishTime desc").limit(pageSize - newsList.size()).find(NewsAbstractObject.class));
+                //newsList.addAll(LitePal.where("publishTime < ? and title like ? and type in (?)", Long.toString(earliestInList), "%" + keyWord + "%", "\"" + String.join("\",\"", categoryItemList) + "\"")
+                        //.order("publishTime desc").limit(pageSize - newsList.size()).find(NewsAbstractObject.class));
             }catch(Exception e){
                 e.printStackTrace();
             }
@@ -125,8 +128,10 @@ public class FragmentHome extends Fragment {
         }
 
         long earliestInList = newsList.get(newsList.size() - 1).getPublishTime().getTime();
-        newsList.addAll(LitePal.where("publishTime < ? and title like ? and type in (?)", Long.toString(earliestInList), "%" + keyWord + "%", "\"" + String.join("\",\"", categoryItemList) + "\"")
+        newsList.addAll(LitePal.where("publishTime < ? and title like ?", Long.toString(earliestInList), "%" + keyWord + "%")
                 .limit(pageSize).find(NewsAbstractObject.class));
+        //newsList.addAll(LitePal.where("publishTime < ? and title like ? and type in (?)", Long.toString(earliestInList), "%" + keyWord + "%", "\"" + String.join("\",\"", categoryItemList) + "\"")
+                //.limit(pageSize).find(NewsAbstractObject.class));
         newsList.sort(new SortByTimeDesc());
         if (newsList.size() < origSize + pageSize)
         {
@@ -135,8 +140,10 @@ public class FragmentHome extends Fragment {
             try{
                 newsListRetrieverThread.join();
                 earliestInList = newsList.get(newsList.size() - 1).getPublishTime().getTime();
-                newsList.addAll(LitePal.where("publishTime < ? and title like ? and type in (?)", Long.toString(earliestInList), "%" + keyWord + "%", "\"" + String.join("\",\"", categoryItemList) + "\"")
+                newsList.addAll(LitePal.where("publishTime < ? and title like ?", Long.toString(earliestInList), "%" + keyWord + "%")
                         .order("publishTime desc").limit(pageSize - newsList.size()).find(NewsAbstractObject.class));
+                //newsList.addAll(LitePal.where("publishTime < ? and title like ? and type in (?)", Long.toString(earliestInList), "%" + keyWord + "%", "\"" + String.join("\",\"", categoryItemList) + "\"")
+                        //.order("publishTime desc").limit(origSize + pageSize - newsList.size()).find(NewsAbstractObject.class));
                 newsList.sort(new SortByTimeDesc());
             }catch(Exception ignored){}
         }
@@ -157,8 +164,8 @@ public class FragmentHome extends Fragment {
         recyclerView.setLayoutManager(llm);
         recyclerView.addItemDecoration(new DividerItemDecoration((MainActivity)getActivity(),RecyclerView.VERTICAL));
 
-        //TODO:adapter = new NewsRecyclerViewAdapter(getActivity(),newsList);
-        //TODO:recyclerView.setAdapter(adapter);
+        adapter = new NewsRecyclerViewAdapter(getActivity(),newsList);
+        recyclerView.setAdapter(adapter);
 
         twinklingRefreshLayout.startRefresh();
         //实现setOnRefreshListener
@@ -173,7 +180,7 @@ public class FragmentHome extends Fragment {
                         try {
                             Thread.sleep(1000);
                         } catch (InterruptedException e) {}
-                        //TODO:adapter.notifyDataSetchanged();
+                        adapter.notifyDataSetChanged();
                         twinklingRefreshLayout.finishRefreshing();
                     }
                 }, 1000);
@@ -190,7 +197,7 @@ public class FragmentHome extends Fragment {
                         try {
                             Thread.sleep(1000);
                         }catch (Exception e){}
-                        //TODO:adapter.notifyDataSetChanged();
+                        adapter.notifyDataSetChanged();
                         twinklingRefreshLayout.finishLoadmore();
                     }
                 }, 1000);
