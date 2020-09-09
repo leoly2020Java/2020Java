@@ -3,6 +3,7 @@
 
     <color name="NewsListTitle">#787878</color>
     <color name="NewsListFootnote">#787878</color>
+    <color name="TextFont">#000000</color>
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>

@@ -18,6 +18,7 @@
         <activity android:name=".NewsClusterActivity" />
         <activity android:name=".VirusScholarActivity" />
         <activity android:name=".AtlasSpecificActivity" />
+        <activity android:name=".ContentActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

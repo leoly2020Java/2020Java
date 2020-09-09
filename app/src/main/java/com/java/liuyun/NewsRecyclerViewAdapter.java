@@ -1,6 +1,7 @@
 package com.java.liuyun;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,12 +33,40 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position)
     {
         MainActivity mainActivity = (MainActivity)context;
-        NewsViewHolder newsViewHolder = (NewsViewHolder) viewHolder;
+        final NewsViewHolder newsViewHolder = (NewsViewHolder) viewHolder;
         newsViewHolder.newsAbstractObject = newsList.get(position);
         
         newsViewHolder.title.setText(newsViewHolder.newsAbstractObject.getTitle());
         newsViewHolder.title.setTextColor(context.getColor(R.color.Blue));
-        //newsViewHolder.title.setOnClickListener(new View.OnClickListener(){});
+        newsViewHolder.title.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                Intent intent = new Intent(context, ContentActivity.class);
+                if (newsViewHolder.newsAbstractObject.getDetailNews() == null)
+                {
+                    NewsContentRetrieverThread newsContentRetrieverThread = new NewsContentRetrieverThread();
+                    newsContentRetrieverThread.setNewsAbstractObject(newsViewHolder.newsAbstractObject);
+                    newsContentRetrieverThread.start();
+                    try{
+                        newsContentRetrieverThread.join();
+                    }catch(Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+                NewsObject newsObject = newsViewHolder.newsAbstractObject.getDetailNews();
+                newsObject.saveAsync();
+                newsViewHolder.newsAbstractObject.saveAsync();
+                intent.putExtra("title", newsObject.getTitle());
+                intent.putExtra("content", newsObject.getContent());
+                intent.putExtra("type", newsObject.getType());
+                intent.putExtra("source", newsObject.getSource());
+                intent.putExtra("publishTime", DateUtils.getRelativeTimeSpanString(newsViewHolder.newsAbstractObject.getPublishTime().getTime()));
+                context.startActivity(intent);
+            }
+        });
         newsViewHolder.publishTime.setText(DateUtils.getRelativeTimeSpanString(newsViewHolder.newsAbstractObject.getPublishTime().getTime()));
         newsViewHolder.type.setText(newsViewHolder.newsAbstractObject.getType());
     }

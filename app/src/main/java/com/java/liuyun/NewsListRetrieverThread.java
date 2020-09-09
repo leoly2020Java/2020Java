@@ -93,10 +93,7 @@ public class NewsListRetrieverThread extends Thread{
                     newsAbstractObject.parseJSON(jsonNews);
                     if (LitePal.where("newsID = ?", newsAbstractObject.getNewsID()).find(NewsAbstractObject.class).size() == 0)
                     {
-                        NewsObject newsObject = new NewsObject();
-                        newsAbstractObject.setDetailNews(newsObject);
-                        newsObject.save();
-                        newsAbstractObject.save();
+                        newsAbstractObject.saveAsync();
                         moreAmount--;
                         if (moreAmount == 0)
                         {

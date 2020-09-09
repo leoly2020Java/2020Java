@@ -51,10 +51,7 @@ public class NewsListUpdaterThread extends Thread{
                 JSONObject jsonNews = jsonArray.getJSONObject(i);
                 NewsAbstractObject newsAbstractObject = new NewsAbstractObject();
                 newsAbstractObject.parseJSON(jsonNews);
-                NewsObject newsObject = new NewsObject();
-                newsAbstractObject.setDetailNews(newsObject);
-                newsObject.save();
-                newsAbstractObject.save();
+                newsAbstractObject.saveAsync();
             }
         }catch(Exception e){
             e.printStackTrace();

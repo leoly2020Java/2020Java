@@ -10,9 +10,15 @@ import java.net.URL;
 
 public class NewsContentRetrieverThread extends Thread {
 
+    private NewsAbstractObject newsAbstractObject;
+
+    public void setNewsAbstractObject(NewsAbstractObject newsAbstractObject) {
+        this.newsAbstractObject = newsAbstractObject;
+    }
+
     public void run()
     {
-
+        getNewsContent(newsAbstractObject);
     }
 
     public void getNewsContent(NewsAbstractObject newsAbstractObject)
@@ -36,9 +42,9 @@ public class NewsContentRetrieverThread extends Thread {
             inputStream.close();
             JSONObject json = new JSONObject(stringBuffer.toString());
             JSONObject jsonNews = json.getJSONObject("data");
-            NewsObject newsObject = newsAbstractObject.getDetailNews();
+            NewsObject newsObject = new NewsObject();
             newsObject.parseJSON(jsonNews);
-            newsObject.save();
+            newsAbstractObject.setDetailNews(newsObject);
         }catch(Exception ignored){}
 
     }
