@@ -15,9 +15,9 @@ public class ScholarExpandableListAdapter extends BaseExpandableListAdapter {
 
     public List<String> groupString;
     public List<String> groupSize;
-    public List<List<ScholarData>> childString;
+    public List<List<AtlasData>> childString;
 
-    public ScholarExpandableListAdapter(List<String> groupString, List<String> groupSize, List<List<ScholarData>> childString) {
+    public ScholarExpandableListAdapter(List<String> groupString, List<String> groupSize, List<List<AtlasData>> childString) {
         this.groupString = groupString;
         this.childString = childString;
         this.groupSize = groupSize;
@@ -118,8 +118,8 @@ public class ScholarExpandableListAdapter extends BaseExpandableListAdapter {
         }else {
             childViewHolder = (AtlasExpandableListAdapter.ChildViewHolder) convertView.getTag();
         }
-        childViewHolder.title.setText(childString.get(groupPosition).get(childPosition).name);
-        childViewHolder.descr.setText(childString.get(groupPosition).get(childPosition).position);
+        childViewHolder.title.setText(childString.get(groupPosition).get(childPosition).title);
+        childViewHolder.descr.setText(childString.get(groupPosition).get(childPosition).descr);
         return convertView;
     }
 
