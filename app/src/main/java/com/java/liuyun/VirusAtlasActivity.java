@@ -23,12 +23,12 @@ public class VirusAtlasActivity extends AppCompatActivity {
 
     String atlasName;
     String atlasDescription;
-    List<String> relationTitle;
-    List<String> relationDescription;
-    List<Boolean> relationDirection;
-    List<String> attributeTitle;
-    List<String> attributeDescription;
-    List<String> relatedEntities;
+    List<String> relationTitle = new ArrayList<>();
+    List<String> relationDescription = new ArrayList<>();
+    List<Boolean> relationDirection = new ArrayList<>();
+    List<String> attributeTitle = new ArrayList<>();
+    List<String> attributeDescription = new ArrayList<>();
+    List<String> relatedEntities = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +65,7 @@ public class VirusAtlasActivity extends AppCompatActivity {
                 intent.putExtra("Name", atlasName);
                 intent.putExtra("Description", atlasDescription);
                 intent.putExtra("RelationTitle", (Serializable) relationTitle);
-                intent.putExtra("RelationDescripton", (Serializable) relationDescription);
+                intent.putExtra("RelationDescription", (Serializable) relationDescription);
                 intent.putExtra("AttributeTitle", (Serializable) attributeTitle);
                 intent.putExtra("AttributeDescription", (Serializable) attributeDescription);
                 intent.putExtra("RelatedWord", (Serializable) relatedEntities);
