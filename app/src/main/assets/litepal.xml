@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <litepal>
     <dbname value="NewsLib" />
-    <version value="3" />
+    <version value="4" />
     <list>
         <mapping class="com.java.liuyun.NewsAbstractObject" />
         <mapping class="com.java.liuyun.NewsObject" />

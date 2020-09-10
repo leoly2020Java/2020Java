@@ -63,13 +63,14 @@ public class FragmentHome extends Fragment {
     public void flush() {
         int pageSize = 12;
         newsList.clear();
-        LitePal.deleteAll(NewsAbstractObject.class);
-        LitePal.deleteAll(NewsObject.class);
 
+        List<NewsAbstractObject> addedNewsList = new ArrayList<>();
         NewsListUpdaterThread newsListUpdaterThread = new NewsListUpdaterThread();
+        newsListUpdaterThread.setAddedNewsList(addedNewsList);
         newsListUpdaterThread.start();
         try{
             newsListUpdaterThread.join();
+            LitePal.saveAll(addedNewsList);
             if (categoryItemList.size() == 1)
             {
                 newsList.addAll(LitePal.where("title like ? and type like ?", "%" + keyWord + "%", categoryItemList.get(0))
@@ -82,12 +83,16 @@ public class FragmentHome extends Fragment {
             }
             newsList.sort(new SortByTimeDesc());
         }catch(Exception ignored){}
-        while (newsList.size() == 0)
+        if (newsList.size() == 0)
         {
             NewsListRetrieverThread newsListRetrieverThread = new NewsListRetrieverThread();
+            addedNewsList = new ArrayList<>();
+            newsListRetrieverThread.setAddedNewsList(addedNewsList);
+            newsListRetrieverThread.setCategoryItemList(categoryItemList);
             newsListRetrieverThread.start();
             try{
                 newsListRetrieverThread.join();
+                LitePal.saveAll(addedNewsList);
                 if (categoryItemList.size() == 1)
                 {
                     newsList.addAll(LitePal.where("title like ? and type like ?", "%" + keyWord + "%", categoryItemList.get(0))
@@ -99,25 +104,6 @@ public class FragmentHome extends Fragment {
                             .order("publishTime desc").limit(pageSize).find(NewsAbstractObject.class));
                 }
                 newsList.sort(new SortByTimeDesc());
-            }catch(Exception ignored){}
-        }
-        if (newsList.size() < pageSize)
-        {
-            long earliestInList = newsList.get(newsList.size() - 1).getPublishTime().getTime();
-            NewsListRetrieverThread newsListRetrieverThread = new NewsListRetrieverThread();
-            newsListRetrieverThread.start();
-            try{
-                newsListRetrieverThread.join();
-                if (categoryItemList.size() == 1)
-                {
-                    newsList.addAll(LitePal.where("publishTime < ? and title like ? and type like ?", Long.toString(earliestInList), "%" + keyWord + "%", categoryItemList.get(0))
-                            .order("publishTime desc").limit(pageSize).find(NewsAbstractObject.class));
-                }
-                else
-                {
-                    newsList.addAll(LitePal.where("publishTime < ? and title like ?", Long.toString(earliestInList), "%" + keyWord + "%")
-                            .order("publishTime desc").limit(pageSize).find(NewsAbstractObject.class));
-                }
             }catch(Exception ignored){}
         }
 
@@ -146,32 +132,15 @@ public class FragmentHome extends Fragment {
                     .order("publishTime desc").limit(pageSize).find(NewsAbstractObject.class));
         }
         newsList.sort(new SortByTimeDesc());
-        while (newsList.size() == origSize)
-        {
-            NewsListRetrieverThread newsListRetrieverThread = new NewsListRetrieverThread();
-            newsListRetrieverThread.start();
-            try{
-                newsListRetrieverThread.join();
-                earliestInList = newsList.get(newsList.size() - 1).getPublishTime().getTime();
-                if (categoryItemList.size() == 1)
-                {
-                    newsList.addAll(LitePal.where("publishTime < ? and title like ? and type like ?", Long.toString(earliestInList), "%" + keyWord + "%", categoryItemList.get(0))
-                            .order("publishTime desc").limit(pageSize).find(NewsAbstractObject.class));
-                }
-                else
-                {
-                    newsList.addAll(LitePal.where("publishTime < ? and title like ?", Long.toString(earliestInList), "%" + keyWord + "%")
-                            .order("publishTime desc").limit(pageSize).find(NewsAbstractObject.class));
-                }
-                newsList.sort(new SortByTimeDesc());
-            }catch(Exception ignored){}
-        }
         if (newsList.size() < origSize + pageSize)
         {
             NewsListRetrieverThread newsListRetrieverThread = new NewsListRetrieverThread();
+            List<NewsAbstractObject> addedNewsList = new ArrayList<>();
+            newsListRetrieverThread.setAddedNewsList(addedNewsList);
             newsListRetrieverThread.start();
             try{
                 newsListRetrieverThread.join();
+                LitePal.saveAll(addedNewsList);
                 earliestInList = newsList.get(newsList.size() - 1).getPublishTime().getTime();
                 if (categoryItemList.size() == 1)
                 {
@@ -186,7 +155,6 @@ public class FragmentHome extends Fragment {
                 newsList.sort(new SortByTimeDesc());
             }catch(Exception ignored){}
         }
-
 
         Toast.makeText(getActivity(), "loadMore: newsList.size() = "+newsList.size(), Toast.LENGTH_SHORT).show(); //Debug
 

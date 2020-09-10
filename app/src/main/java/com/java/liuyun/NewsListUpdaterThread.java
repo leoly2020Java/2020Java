@@ -10,8 +10,19 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Date;
+import java.util.List;
 
 public class NewsListUpdaterThread extends Thread{
+
+    public List<NewsAbstractObject> getAddedNewsList() {
+        return addedNewsList;
+    }
+
+    public void setAddedNewsList(List<NewsAbstractObject> addedNewsList) {
+        this.addedNewsList = addedNewsList;
+    }
+
+    private List<NewsAbstractObject> addedNewsList;
 
     public void run()
     {
@@ -51,7 +62,7 @@ public class NewsListUpdaterThread extends Thread{
                 JSONObject jsonNews = jsonArray.getJSONObject(i);
                 NewsAbstractObject newsAbstractObject = new NewsAbstractObject();
                 newsAbstractObject.parseJSON(jsonNews);
-                newsAbstractObject.saveAsync();
+                addedNewsList.add(newsAbstractObject);
             }
         }catch(Exception e){
             e.printStackTrace();
@@ -99,10 +110,7 @@ public class NewsListUpdaterThread extends Thread{
                         }
                         if (LitePal.where("newsID = ?", newsAbstractObject.getNewsID()).find(NewsAbstractObject.class) == null)
                         {
-                            NewsObject newsObject = new NewsObject();
-                            newsAbstractObject.setDetailNews(newsObject);
-                            newsObject.save();
-                            newsAbstractObject.save();
+                            addedNewsList.add(newsAbstractObject);
                         }
                     }
                 }

@@ -18,10 +18,10 @@ public class NewsContentRetrieverThread extends Thread {
 
     public void run()
     {
-        getNewsContent(newsAbstractObject);
+        getNewsContent();
     }
 
-    public void getNewsContent(NewsAbstractObject newsAbstractObject)
+    public void getNewsContent()
     {
         try{
             String newsID = newsAbstractObject.getNewsID();

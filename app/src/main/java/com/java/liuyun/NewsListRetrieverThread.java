@@ -9,8 +9,25 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 public class NewsListRetrieverThread extends Thread{
+
+    private List<String> categoryItemList;
+
+    public List<NewsAbstractObject> getAddedNewsList() {
+        return addedNewsList;
+    }
+
+    public void setAddedNewsList(List<NewsAbstractObject> addedNewsList) {
+        this.addedNewsList = addedNewsList;
+    }
+
+    private List<NewsAbstractObject> addedNewsList;
+
+    public void setCategoryItemList(List<String> categoryItemList) {
+        this.categoryItemList = categoryItemList;
+    }
 
     public void run()
     {
@@ -50,10 +67,7 @@ public class NewsListRetrieverThread extends Thread{
                 JSONObject jsonNews = jsonArray.getJSONObject(i);
                 NewsAbstractObject newsAbstractObject = new NewsAbstractObject();
                 newsAbstractObject.parseJSON(jsonNews);
-                NewsObject newsObject = new NewsObject();
-                newsAbstractObject.setDetailNews(newsObject);
-                newsObject.save();
-                newsAbstractObject.save();
+                addedNewsList.add(newsAbstractObject);
             }
         }catch(Exception e){
             e.printStackTrace();
@@ -63,10 +77,14 @@ public class NewsListRetrieverThread extends Thread{
     public void getMoreNews(int moreAmount)
     {
         try{
-            int newsCount = LitePal.count(NewsAbstractObject.class);
             int pageSize = 200;
-            String urlHeader = "https://covid-dashboard.aminer.cn/api/events/list?size=" + pageSize + "&page=";
-            int page = (newsCount + 1) / pageSize;
+            String urlHeader = "https://covid-dashboard.aminer.cn/api/events/list?size=" + pageSize + "&";
+            if (categoryItemList.size() == 1)
+            {
+                urlHeader += "type=" + categoryItemList.get(0) + "&";
+            }
+            urlHeader += "page=";
+            int page = 1;
             while(moreAmount != 0)
             {
                 URL url = new URL(urlHeader + page);
@@ -93,7 +111,7 @@ public class NewsListRetrieverThread extends Thread{
                     newsAbstractObject.parseJSON(jsonNews);
                     if (LitePal.where("newsID = ?", newsAbstractObject.getNewsID()).find(NewsAbstractObject.class).size() == 0)
                     {
-                        newsAbstractObject.saveAsync();
+                        addedNewsList.add(newsAbstractObject);
                         moreAmount--;
                         if (moreAmount == 0)
                         {
