@@ -9,15 +9,15 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class ScholarExpandableListAdapter extends BaseExpandableListAdapter {
+public class ScholarContentExpandableListAdapter extends BaseExpandableListAdapter {
 
     private Context mcontext;
 
     public List<String> groupString;
     public List<String> groupSize;
-    public List<List<ScholarData>> childString;
+    public List<List<String>> childString;
 
-    public ScholarExpandableListAdapter(List<String> groupString, List<String> groupSize, List<List<ScholarData>> childString) {
+    public ScholarContentExpandableListAdapter(List<String> groupString, List<String> groupSize, List<List<String>> childString) {
         this.groupString = groupString;
         this.childString = childString;
         this.groupSize = groupSize;
@@ -78,10 +78,10 @@ public class ScholarExpandableListAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         AtlasExpandableListAdapter.GroupViewHolder groupViewHolder;
         if (convertView == null){
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.virus_scholar_category_layout,parent,false);
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.scholar_content_category_layout,parent,false);
             groupViewHolder = new AtlasExpandableListAdapter.GroupViewHolder();
-            groupViewHolder.title = (TextView) convertView.findViewById(R.id.scholar_category_name);
-            groupViewHolder.descr = (TextView) convertView.findViewById(R.id.scholar_category_size);
+            groupViewHolder.title = (TextView) convertView.findViewById(R.id.scholar_content_category_name);
+            groupViewHolder.descr = (TextView) convertView.findViewById(R.id.scholar_content_category_size);
             convertView.setTag(groupViewHolder);
         }else {
             groupViewHolder = (AtlasExpandableListAdapter.GroupViewHolder)convertView.getTag();
@@ -109,17 +109,15 @@ public class ScholarExpandableListAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         AtlasExpandableListAdapter.ChildViewHolder childViewHolder;
         if (convertView==null){
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.virus_scholar_item_layout,parent,false);
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.scholar_content_item_layout,parent,false);
             childViewHolder = new AtlasExpandableListAdapter.ChildViewHolder();
-            childViewHolder.title = (TextView)convertView.findViewById(R.id.scholar_item_name);
-            childViewHolder.descr = (TextView)convertView.findViewById(R.id.scholar_item_description);
+            childViewHolder.title = (TextView)convertView.findViewById(R.id.scholar_content_item_name);
             convertView.setTag(childViewHolder);
 
         }else {
             childViewHolder = (AtlasExpandableListAdapter.ChildViewHolder) convertView.getTag();
         }
-        childViewHolder.title.setText(childString.get(groupPosition).get(childPosition).name);
-        childViewHolder.descr.setText(childString.get(groupPosition).get(childPosition).position);
+        childViewHolder.title.setText(childString.get(groupPosition).get(childPosition));
         return convertView;
     }
 
@@ -136,6 +134,6 @@ public class ScholarExpandableListAdapter extends BaseExpandableListAdapter {
 
     static class ChildViewHolder {
         TextView title;
-        TextView descr;
     }
+
 }
