@@ -25,10 +25,12 @@ public class VirusDataActivity extends AppCompatActivity {
     BarChart chinaChart;
     Description description;
 
-    List<String> worldNames = new ArrayList<>();
-    List<Integer> worldAmounts = new ArrayList<>();
-    List<String> chinaNames = new ArrayList<>();
-    List<Integer> chinaAmounts = new ArrayList<>();
+    List<String> worldNames = new ArrayList<>(); //国家名称
+    List<Integer> worldAmounts = new ArrayList<>(); //感染人数
+    List<Integer> worldDeaths = new ArrayList<>(); //死亡人数
+    List<String> chinaNames = new ArrayList<>(); //中国省份名称
+    List<Integer> chinaAmounts = new ArrayList<>(); //中国省份感染人数
+    List<Integer> chinaDeaths = new ArrayList<>(); //中国省份死亡人数
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +39,15 @@ public class VirusDataActivity extends AppCompatActivity {
         worldChart = findViewById(R.id.world_chart);
         chinaChart = findViewById(R.id.china_chart);
 
-        //TODO：获取疫情数据信息
-        worldNames.add("美国"); worldNames.add("中国");
-        worldAmounts.add(77777); worldAmounts.add(11111);
+        //TODO：获取疫情数据信息，需要以下6类信息，可事先将数据排序后传入
+        // [重要]worldNames.size()==worldAmounts.size()==worldDeaths.size()
+        // [重要]chinaNames.size()==chinaAmounts.size()==chinaDeaths.size()
+        worldNames.add("美国"); worldNames.add("印度"); worldNames.add("中国");
+        worldAmounts.add(6666666); worldAmounts.add(1111111); worldAmounts.add(88888);
+        worldDeaths.add(888888); worldDeaths.add(300000); worldDeaths.add(2222);
         chinaNames.add("武汉"); chinaNames.add("广州");
-        chinaAmounts.add(6666); chinaAmounts.add(1111);
+        chinaAmounts.add(66666); chinaAmounts.add(11111);
+        chinaDeaths.add(2000); chinaDeaths.add(200);
 
         initWorldChart();
         initChinaChart();
@@ -83,33 +89,41 @@ public class VirusDataActivity extends AppCompatActivity {
         worldChart.animateY(2500);
         //设置Y轴刻度的最大值
         axisLeft.setAxisMinValue(0);
-        axisLeft.setAxisMaxValue(80000);
+        axisLeft.setAxisMaxValue(7000000);
         worldChart.getAxisRight().setEnabled(false);
 
         //设置数据
-        setWorldData(worldAmounts);
+        setWorldData(worldAmounts, worldDeaths);
     }
     //在这里获取疫情数据
-    private void setWorldData(List<Integer> amounts) {
+    private void setWorldData(List<Integer> amounts, List<Integer> deaths) {
         ArrayList<BarEntry> yVals1 = new ArrayList<>();
-        for (int i = 0; i < amounts.size(); i++)
-            yVals1.add(new BarEntry(i + 1, amounts.get(i)));
+        ArrayList<BarEntry> yVals2 = new ArrayList<>();
 
-        BarDataSet set1;
-        set1 = new BarDataSet(yVals1, "");
+        for (int i = 0; i < amounts.size(); i++) yVals1.add(new BarEntry(i + 1, amounts.get(i)));
+        for (int i = 0; i < amounts.size(); i++) yVals2.add(new BarEntry(i + 1, deaths.get(i)));
+
+        BarDataSet set1, set2;
+        set1 = new BarDataSet(yVals1, "累计确诊人数");
+        set2 = new BarDataSet(yVals2, "累计死亡人数");
         //设置多彩 也可以单一颜色
         set1.setColor(Color.parseColor("#4169E1"));
         set1.setDrawValues(false);
+        set2.setColor(Color.parseColor("#666666"));
+        set2.setDrawValues(false);
         ArrayList<IBarDataSet> dataSets = new ArrayList<>();
         dataSets.add(set1);
+        dataSets.add(set2);
         BarData data = new BarData(dataSets);
+
         worldChart.setData(data);
         worldChart.setFitBars(true);
+
         //设置文字的大小
-        set1.setValueTextSize(12f);
+        set1.setValueTextSize(10f);
+        worldChart.invalidate();
         //设置每条柱子的宽度
         data.setBarWidth(0.5f);
-        worldChart.invalidate();
 
         for (IDataSet set : worldChart.getData().getDataSets())
             set.setDrawValues(!set.isDrawValuesEnabled());
@@ -151,30 +165,35 @@ public class VirusDataActivity extends AppCompatActivity {
         chinaChart.animateY(2500);
         //设置Y轴刻度的最大值
         axisLeft.setAxisMinValue(0);
-        axisLeft.setAxisMaxValue(10000);
+        axisLeft.setAxisMaxValue(100000);
         chinaChart.getAxisRight().setEnabled(false);
 
         //设置数据
-        setChinaData(chinaAmounts);
+        setChinaData(chinaAmounts, chinaDeaths);
     }
     //在这里获取疫情数据
-    private void setChinaData(List<Integer> amounts) {
+    private void setChinaData(List<Integer> amounts, List<Integer> deaths) {
         ArrayList<BarEntry> yVals1 = new ArrayList<>();
-        for (int i = 0; i < amounts.size(); i++)
-            yVals1.add(new BarEntry(i + 1, amounts.get(i)));
+        ArrayList<BarEntry> yVals2 = new ArrayList<>();
+        for (int i = 0; i < amounts.size(); i++) yVals1.add(new BarEntry(i + 1, amounts.get(i)));
+        for (int i = 0; i < deaths.size(); i++) yVals2.add(new BarEntry(i + 1, deaths.get(i)));
 
-        BarDataSet set1;
-        set1 = new BarDataSet(yVals1, "");
+        BarDataSet set1, set2;
+        set1 = new BarDataSet(yVals1, "累计确诊人数");
+        set2 = new BarDataSet(yVals2, "累计死亡人数");
         //设置多彩 也可以单一颜色
         set1.setColor(Color.parseColor("#4169E1"));
         set1.setDrawValues(false);
+        set2.setColor(Color.parseColor("#666666"));
+        set2.setDrawValues(false);
         ArrayList<IBarDataSet> dataSets = new ArrayList<>();
         dataSets.add(set1);
+        dataSets.add(set2);
         BarData data = new BarData(dataSets);
         chinaChart.setData(data);
         chinaChart.setFitBars(true);
         //设置文字的大小
-        set1.setValueTextSize(12f);
+        set1.setValueTextSize(10f);
         //设置每条柱子的宽度
         data.setBarWidth(0.5f);
         chinaChart.invalidate();
