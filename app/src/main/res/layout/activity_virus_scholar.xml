@@ -9,5 +9,16 @@
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/Exercise2" />
+        android:background="#9C27B0"
+        android:gravity="center"
+        android:text="@string/VirusScholar"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <ExpandableListView
+        android:id="@+id/scholar_expandable_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </LinearLayout>

@@ -321,9 +321,9 @@ class VirusDataThread extends Thread{
                 worldNames.add(worldInfo.get(i).location);
                 worldAmounts.add(worldInfo.get(i).amount);
                 worldDeaths.add(worldInfo.get(i).death);
-                chinaNames.add(chinaInfo.get(i).location);
-                chinaAmounts.add(chinaInfo.get(i).amount);
-                chinaDeaths.add(chinaInfo.get(i).death);
+                chinaNames.add(worldInfo.get(i).location);
+                chinaAmounts.add(worldInfo.get(i).amount);
+                chinaDeaths.add(worldInfo.get(i).death);
             }
         } catch (Exception e) {
             e.printStackTrace();
