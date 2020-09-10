@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="720px"
+    android:layout_height="720px"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/share_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:maxLines="2"
+        android:paddingLeft="50px"
+        android:paddingTop="50px"
+        android:paddingRight="50px"
+        android:paddingBottom="50px"
+        android:text="@string/Aoligei"
+        android:textColor="#9C27B0"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/share_summary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="6"
+        android:paddingLeft="30px"
+        android:paddingTop="30px"
+        android:paddingRight="30px"
+        android:paddingBottom="30px"
+        android:text="@string/Aoligei"
+        android:textColor="#424242" />
+</LinearLayout>
