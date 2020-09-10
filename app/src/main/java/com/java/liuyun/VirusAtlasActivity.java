@@ -21,14 +21,13 @@ import java.util.List;
 
 public class VirusAtlasActivity extends AppCompatActivity {
 
-    String atlasName;
-    String atlasDescription;
-    List<String> relationTitle;
-    List<String> relationDescription;
-    List<Boolean> relationDirection;
-    List<String> attributeTitle;
-    List<String> attributeDescription;
-    List<String> relatedEntities;
+    List<String> entityInfo = new ArrayList<>();
+    List<String> relationTitle = new ArrayList<>();
+    List<String> relationDescription = new ArrayList<>();
+    List<Boolean> relationDirection = new ArrayList<>();
+    List<String> attributeTitle = new ArrayList<>();
+    List<String> attributeDescription = new ArrayList<>();
+    List<String> relatedEntities = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +43,7 @@ public class VirusAtlasActivity extends AppCompatActivity {
 
                 VirusAtlasThread virusAtlasThread = new VirusAtlasThread();
                 virusAtlasThread.setKeyWord(keyWord);
-                virusAtlasThread.setAtlasName(atlasName);
-                virusAtlasThread.setAtlasDescription(atlasDescription);
+                virusAtlasThread.setEntityInfo(entityInfo);
                 virusAtlasThread.setRelationTitle(relationTitle);
                 virusAtlasThread.setRelationDescription(relationDescription);
                 virusAtlasThread.setRelationDirection(relationDirection);
@@ -62,8 +60,8 @@ public class VirusAtlasActivity extends AppCompatActivity {
                 
                 Intent intent = new Intent(VirusAtlasActivity.this, AtlasSpecificActivity.class);
 
-                intent.putExtra("Name", atlasName);
-                intent.putExtra("Description", atlasDescription);
+                intent.putExtra("Name", entityInfo.get(0));
+                intent.putExtra("Description", entityInfo.get(1));
                 intent.putExtra("RelationTitle", (Serializable) relationTitle);
                 intent.putExtra("RelationDescripton", (Serializable) relationDescription);
                 intent.putExtra("AttributeTitle", (Serializable) attributeTitle);
@@ -90,8 +88,7 @@ public class VirusAtlasActivity extends AppCompatActivity {
 }
 
 class VirusAtlasThread extends Thread{
-    String atlasName;
-    String atlasDescription;
+    List<String> entityInfo;
     List<String> relationTitle;
     List<String> relationDescription;
     List<Boolean> relationDirection;
@@ -100,12 +97,8 @@ class VirusAtlasThread extends Thread{
     String keyWord;
     List<String> relatedEntities;
 
-    public void setAtlasName(String atlasName) {
-        this.atlasName = atlasName;
-    }
-
-    public void setAtlasDescription(String atlasDescription) {
-        this.atlasDescription = atlasDescription;
+    public void setEntityInfo(List<String> entityInfo) {
+        this.entityInfo = entityInfo;
     }
 
     public void setRelationTitle(List<String> relationTitle) {
@@ -165,16 +158,18 @@ class VirusAtlasThread extends Thread{
                 relatedEntities.add(jsonData.getJSONObject(i).getString("label"));
             }
             JSONObject jsonEntity = jsonData.getJSONObject(0);
-            atlasName = jsonEntity.getString("label");
+            entityInfo.add(jsonEntity.getString("label"));
             JSONObject jsonInfo = jsonEntity.getJSONObject("abstractInfo");
-            atlasDescription = jsonInfo.getString("enwiki");
-            if (atlasDescription.equals(""))
+            entityInfo.add(jsonInfo.getString("enwiki"));
+            if (entityInfo.get(1).equals(""))
             {
-                atlasDescription = jsonInfo.getString("baidu");
+                entityInfo.remove(1);
+                entityInfo.add(jsonInfo.getString("baidu"));
             }
-            if (atlasDescription.equals(""))
+            if (entityInfo.get(1).equals(""))
             {
-                atlasDescription = jsonInfo.getString("zhwiki");
+                entityInfo.remove(1);
+                entityInfo.add(jsonInfo.getString("zhwiki"));
             }
             JSONObject jsonCOVID = jsonInfo.getJSONObject("COVID");
             JSONObject jsonProperties = jsonCOVID.getJSONObject("properties");
