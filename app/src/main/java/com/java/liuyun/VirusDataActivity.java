@@ -178,7 +178,7 @@ public class VirusDataActivity extends AppCompatActivity {
         chinaChart.animateY(2500);
         //设置Y轴刻度的最大值
         axisLeft.setAxisMinValue(0);
-        axisLeft.setAxisMaxValue(100000);
+        axisLeft.setAxisMaxValue(80000);
         chinaChart.getAxisRight().setEnabled(false);
 
         //设置数据
