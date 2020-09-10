@@ -16,7 +16,16 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.interfaces.datasets.IDataSet;
 
+import org.json.*;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 public class VirusDataActivity extends AppCompatActivity {
@@ -39,15 +48,19 @@ public class VirusDataActivity extends AppCompatActivity {
         worldChart = findViewById(R.id.world_chart);
         chinaChart = findViewById(R.id.china_chart);
 
-        //TODO：获取疫情数据信息，需要以下6类信息，可事先将数据排序后传入
-        // [重要]worldNames.size()==worldAmounts.size()==worldDeaths.size()
-        // [重要]chinaNames.size()==chinaAmounts.size()==chinaDeaths.size()
-        worldNames.add("美国"); worldNames.add("印度"); worldNames.add("中国");
-        worldAmounts.add(6666666); worldAmounts.add(1111111); worldAmounts.add(88888);
-        worldDeaths.add(888888); worldDeaths.add(300000); worldDeaths.add(2222);
-        chinaNames.add("武汉"); chinaNames.add("广州");
-        chinaAmounts.add(66666); chinaAmounts.add(11111);
-        chinaDeaths.add(2000); chinaDeaths.add(200);
+        VirusDataThread virusDataThread = new VirusDataThread();
+        virusDataThread.setWorldNames(worldNames);
+        virusDataThread.setWorldAmounts(worldAmounts);
+        virusDataThread.setWorldDeaths(worldDeaths);
+        virusDataThread.setChinaNames(chinaNames);
+        virusDataThread.setChinaAmounts(chinaAmounts);
+        virusDataThread.setChinaDeaths(chinaDeaths);
+        virusDataThread.start();
+        try {
+            virusDataThread.join();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         initWorldChart();
         initChinaChart();
@@ -207,4 +220,120 @@ public class VirusDataActivity extends AppCompatActivity {
 
     }
 
+}
+
+
+
+class VirusDataThread extends Thread{
+
+    public void setWorldNames(List<String> worldNames) {
+        this.worldNames = worldNames;
+    }
+
+    public void setWorldAmounts(List<Integer> worldAmounts) {
+        this.worldAmounts = worldAmounts;
+    }
+
+    public void setWorldDeaths(List<Integer> worldDeaths) {
+        this.worldDeaths = worldDeaths;
+    }
+
+    public void setChinaNames(List<String> chinaNames) {
+        this.chinaNames = chinaNames;
+    }
+
+    public void setChinaAmounts(List<Integer> chinaAmounts) {
+        this.chinaAmounts = chinaAmounts;
+    }
+
+    public void setChinaDeaths(List<Integer> chinaDeaths) {
+        this.chinaDeaths = chinaDeaths;
+    }
+
+    List<String> worldNames;
+    List<Integer> worldAmounts;
+    List<Integer> worldDeaths;
+    List<String> chinaNames;
+    List<Integer> chinaAmounts;
+    List<Integer> chinaDeaths;
+    List<Triple> worldInfo;
+    List<Triple> chinaInfo;
+
+    public void run()
+    {
+        worldNames.clear();
+        worldAmounts.clear();
+        worldDeaths.clear();
+        chinaNames.clear();
+        chinaAmounts.clear();
+        chinaDeaths.clear();
+        worldInfo = new ArrayList<>();
+        chinaInfo = new ArrayList<>();
+        try {
+            URL url = new URL("https://covid-dashboard.aminer.cn/api/dist/epidemic.json");
+            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+            InputStream inputStream = httpURLConnection.getInputStream();
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            StringBuilder stringBuffer = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuffer.append(line);
+            }
+            bufferedReader.close();
+            inputStreamReader.close();
+            inputStream.close();
+            JSONObject json = new JSONObject(stringBuffer.toString());
+            for (Iterator<String> it = json.keys(); it.hasNext(); ) {
+                String location = it.next();
+                JSONArray virusData = json.getJSONObject(location).getJSONArray("data");
+                JSONArray latestVirusData = virusData.getJSONArray(virusData.length() - 1);
+                if (!location.contains("|")) {
+                    Triple triple = new Triple();
+                    triple.location = location;
+                    triple.amount = latestVirusData.getInt(0);
+                    triple.death = latestVirusData.getInt(3);
+                    worldInfo.add(triple);
+                }
+                else if (location.startsWith("China|") & (location.length() <= 6 | !location.substring(6).contains("|"))) {
+                    Triple triple = new Triple();
+                    triple.location = location.substring(6);
+                    triple.amount = latestVirusData.getInt(0);
+                    triple.death = latestVirusData.getInt(3);
+                    chinaInfo.add(triple);
+                }
+            }
+            chinaInfo.sort(new Comparator<Triple>() {
+                @Override
+                public int compare(Triple t1, Triple t2) {
+                    return t2.amount - t1.amount;
+                }
+            });
+            worldInfo.sort(new Comparator<Triple>() {
+                @Override
+                public int compare(Triple t1, Triple t2) {
+                    return t2.amount - t1.amount;
+                }
+            });
+            worldInfo.remove(0);
+            for (int i = 0; i < 10; i++)
+            {
+                worldNames.add(worldInfo.get(i).location);
+                worldAmounts.add(worldInfo.get(i).amount);
+                worldDeaths.add(worldInfo.get(i).death);
+                chinaNames.add(worldInfo.get(i).location);
+                chinaAmounts.add(worldInfo.get(i).amount);
+                chinaDeaths.add(worldInfo.get(i).death);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+class Triple
+{
+    public String location;
+    public int amount;
+    public int death;
 }
