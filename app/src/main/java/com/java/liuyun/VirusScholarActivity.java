@@ -97,8 +97,6 @@ public class VirusScholarActivity extends AppCompatActivity {
         super.onDestroy();
     }
 }
-<<<<<<< HEAD
-=======
 
 class VirusScholarThread extends Thread{
     List<ScholarData> scholarInfoListAlive;
@@ -246,4 +244,3 @@ class ScholarData{
         this.indices = indices;
     }
 }
->>>>>>> parent of fbb9c99... Revert "finish scholar"
