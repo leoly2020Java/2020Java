@@ -36,6 +36,12 @@ public class MainActivity extends AppCompatActivity {
 
     public MainActivity() {
         super();
+        /*
+        System.out.println("get events begin");
+        GetEvents getEvents = new GetEvents();
+        getEvents.solve();
+        System.out.println("get events end");
+         */
         categoryAddList = new ArrayList<>();
         categoryDeleteList = new ArrayList<>();
         categoryAddList.add("news");

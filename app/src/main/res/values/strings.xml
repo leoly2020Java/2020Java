@@ -25,4 +25,5 @@
     <string name="SearchVirusAtlas">疫情图谱查询</string>
     <string name="Aoligei">奥利给</string>
     <string name="Share">分享</string>
+    <string name="ClusterResult">新闻聚类结果</string>
 </resources>

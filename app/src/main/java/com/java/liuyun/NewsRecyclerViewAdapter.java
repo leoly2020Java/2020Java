@@ -3,6 +3,7 @@ package com.java.liuyun;
 import android.content.Context;
 import android.content.Intent;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +40,23 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         newsViewHolder.newsAbstractObject = newsList.get(position);
         
         newsViewHolder.title.setText(newsList.get(position).getTitle());
-        newsViewHolder.title.setTextColor(context.getColor(R.color.Blue));
+
+        if (newsList.get(position).getDetailNews() == null)
+        {
+            List<NewsObject> localRes = LitePal.where("newsID = ?",  newsList.get(position).getNewsID()).find(NewsObject.class);
+            if (localRes.size() != 0)
+            {
+                newsList.get(position).setDetailNews(localRes.get(0));
+            }
+        }
+
+        //设置看过的新闻页面灰色标记
+        if (newsList.get(position).getDetailNews() == null) {
+            newsViewHolder.title.setTextColor(context.getColor(R.color.Blue));
+        } else {
+            newsViewHolder.title.setTextColor(context.getColor(R.color.Grey));
+        }
+
         newsViewHolder.title.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -47,27 +64,19 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
             {
                 if (newsList.get(position).getDetailNews() == null)
                 {
-                    List<NewsObject> localRes = LitePal.where("newsID = ?",  newsList.get(position).getNewsID()).find(NewsObject.class);
-                    if (localRes.size() != 0)
-                    {
-                        newsList.get(position).setDetailNews(localRes.get(0));
-                    }
-                    else
-                    {
-                        NewsContentRetrieverThread newsContentRetrieverThread = new NewsContentRetrieverThread();
-                        newsContentRetrieverThread.setNewsAbstractObject(newsList.get(position));
-                        newsContentRetrieverThread.start();
-                        try{
-                            newsContentRetrieverThread.join();
-                            if (newsList.get(position).getDetailNews() != null)
-                            {
-                                newsList.get(position).getDetailNews().save();
-                                newsList.get(position).save();
-                            }
-                        }catch(Exception e)
+                    NewsContentRetrieverThread newsContentRetrieverThread = new NewsContentRetrieverThread();
+                    newsContentRetrieverThread.setNewsAbstractObject(newsList.get(position));
+                    newsContentRetrieverThread.start();
+                    try{
+                        newsContentRetrieverThread.join();
+                        if (newsList.get(position).getDetailNews() != null)
                         {
-                            e.printStackTrace();
+                            newsList.get(position).getDetailNews().save();
+                            newsList.get(position).save();
                         }
+                    }catch(Exception e)
+                    {
+                        e.printStackTrace();
                     }
                 }
                 NewsObject newsObject = newsList.get(position).getDetailNews();
@@ -80,6 +89,12 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                     intent.putExtra("source", newsObject.getSource());
                     intent.putExtra("publishTime", DateUtils.getRelativeTimeSpanString(newsViewHolder.newsAbstractObject.getPublishTime().getTime()));
                     context.startActivity(intent);
+                    //设置看过的新闻页面灰色标记
+                    if (newsList.get(position).getDetailNews() == null) {
+                        newsViewHolder.title.setTextColor(context.getColor(R.color.Blue));
+                    } else {
+                        newsViewHolder.title.setTextColor(context.getColor(R.color.Grey));
+                    }
                 }
             }
         });
