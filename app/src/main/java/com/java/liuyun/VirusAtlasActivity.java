@@ -6,11 +6,29 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class VirusAtlasActivity extends AppCompatActivity {
+
+    String atlasName;
+    String atlasDescription;
+    List<String> relationTitle;
+    List<String> relationDescription;
+    List<Boolean> relationDirection;
+    List<String> attributeTitle;
+    List<String> attributeDescription;
+    List<String> relatedEntities;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,43 +42,34 @@ public class VirusAtlasActivity extends AppCompatActivity {
                 //打开新的Activity，显示疫情图谱
                 Toast.makeText(getApplicationContext(), "Altas search: "+keyWord, Toast.LENGTH_SHORT).show(); //Debug
 
-                //TODO:keyWord是疫情图谱的查询关键词，寻找是否存在名为keyWord的疫情图谱
-                // 如果不存在，输出一个toast提示信息即可
-                // 如果存在，执行以下内容，获取数据并传入intent后startActivity即可
+                VirusAtlasThread virusAtlasThread = new VirusAtlasThread();
+                virusAtlasThread.setKeyWord(keyWord);
+                virusAtlasThread.setAtlasName(atlasName);
+                virusAtlasThread.setAtlasDescription(atlasDescription);
+                virusAtlasThread.setRelationTitle(relationTitle);
+                virusAtlasThread.setRelationDescription(relationDescription);
+                virusAtlasThread.setRelationDirection(relationDirection);
+                virusAtlasThread.setAttributeTitle(attributeTitle);
+                virusAtlasThread.setAttributeDescription(attributeDescription);
+                virusAtlasThread.setRelatedEntities(relatedEntities);
+                virusAtlasThread.start();
+                try {
+                    virusAtlasThread.join();
+                }catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
                 
                 Intent intent = new Intent(VirusAtlasActivity.this, AtlasSpecificActivity.class);
 
-                //TODO:查询指定疫情图谱的以下7类信息
-                // Name:图谱名称，直接写入intent
-                // Description:图谱描述，直接写入intent
-                // relationTitle:图谱每种关系的名称
-                // relationDescription:图谱每种关系的描述
-                // attributeTitle:图谱每种属性的名称
-                // attributeDescription:图谱每种属性的描述
-                // relatedWord:相关词汇
-                // [重要]要求：relationTitle.size()==relationDescription.size()，attributeTitle.size()==attributeDescription.size()
-                // 下面是一个例子
-
-                intent.putExtra("Name", "新型冠状病毒");
-                intent.putExtra("Description", "新型冠状病毒的描述");
-                List<String> relationTitle = new ArrayList<>();
-                relationTitle.add("疑似宿主"); relationTitle.add("疑似传播途径");
-                List<String> relationDescription = new ArrayList<>();
-                relationDescription.add("中华菊头蝠"); relationDescription.add("气溶胶传播");
-                List<String> attributeTitle = new ArrayList<>();
-                attributeTitle.add("潜伏期"); attributeTitle.add("鉴别诊断"); attributeTitle.add("基本传染指数");
-                List<String> attributeDescription = new ArrayList<>();
-                attributeDescription.add("1-14天，多为3-7天"); attributeDescription.add("主要与流感病毒、副流感病毒、腺病毒、呼吸道合胞病毒、鼻病毒、人偏肺病毒、SARS冠状病毒等其他已知病毒性肺炎鉴别，与肺炎支原体、衣原体肺炎及细菌性肺炎等鉴别。此外，还要与非感染性疾病，如血管炎、皮肌炎和机化性肺炎等鉴别。"); attributeDescription.add("2.2");
-                List<String> relatedWord = new ArrayList<>();
-                relatedWord.add("病毒"); relatedWord.add("冠状病毒");
-
+                intent.putExtra("Name", atlasName);
+                intent.putExtra("Description", atlasDescription);
                 intent.putExtra("RelationTitle", (Serializable) relationTitle);
                 intent.putExtra("RelationDescripton", (Serializable) relationDescription);
                 intent.putExtra("AttributeTitle", (Serializable) attributeTitle);
                 intent.putExtra("AttributeDescription", (Serializable) attributeDescription);
-                intent.putExtra("RelatedWord", (Serializable) relatedWord);
-
-                //intent.putExtra()
+                intent.putExtra("RelatedWord", (Serializable) relatedEntities);
+                
                 startActivity(intent);
             }
         });
@@ -77,5 +86,114 @@ public class VirusAtlasActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+}
+
+class VirusAtlasThread extends Thread{
+    String atlasName;
+    String atlasDescription;
+    List<String> relationTitle;
+    List<String> relationDescription;
+    List<Boolean> relationDirection;
+    List<String> attributeTitle;
+    List<String> attributeDescription;
+    String keyWord;
+    List<String> relatedEntities;
+
+    public void setAtlasName(String atlasName) {
+        this.atlasName = atlasName;
+    }
+
+    public void setAtlasDescription(String atlasDescription) {
+        this.atlasDescription = atlasDescription;
+    }
+
+    public void setRelationTitle(List<String> relationTitle) {
+        this.relationTitle = relationTitle;
+    }
+
+    public void setRelationDescription(List<String> relationDescription) {
+        this.relationDescription = relationDescription;
+    }
+
+    public void setRelationDirection(List<Boolean> relationDirection) {
+        this.relationDirection = relationDirection;
+    }
+
+    public void setAttributeTitle(List<String> attributeTitle) {
+        this.attributeTitle = attributeTitle;
+    }
+
+    public void setAttributeDescription(List<String> attributeDescription) {
+        this.attributeDescription = attributeDescription;
+    }
+
+    public void setKeyWord(String keyWord) {
+        this.keyWord = keyWord;
+    }
+
+    public void setRelatedEntities(List<String> relatedEntities) {
+        this.relatedEntities = relatedEntities;
+    }
+
+    public void run()
+    {
+        relationTitle.clear();
+        relationDescription.clear();
+        relationDirection.clear();
+        attributeTitle.clear();
+        attributeDescription.clear();
+        relatedEntities.clear();
+        try{
+            URL url = new URL("https://innovaapi.aminer.cn/covid/api/v1/pneumonia/entityquery?entity=" + keyWord);
+            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+            InputStream inputStream = httpURLConnection.getInputStream();
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            StringBuilder stringBuffer = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuffer.append(line);
+            }
+            bufferedReader.close();
+            inputStreamReader.close();
+            inputStream.close();
+            JSONObject json = new JSONObject(stringBuffer.toString());
+            JSONArray jsonData = json.getJSONArray("data");
+            for (int i = 1; i < jsonData.length(); i++)
+            {
+                relatedEntities.add(jsonData.getJSONObject(i).getString("label"));
+            }
+            JSONObject jsonEntity = jsonData.getJSONObject(0);
+            atlasName = jsonEntity.getString("label");
+            JSONObject jsonInfo = jsonEntity.getJSONObject("abstractInfo");
+            atlasDescription = jsonInfo.getString("enwiki");
+            if (atlasDescription.equals(""))
+            {
+                atlasDescription = jsonInfo.getString("baidu");
+            }
+            if (atlasDescription.equals(""))
+            {
+                atlasDescription = jsonInfo.getString("zhwiki");
+            }
+            JSONObject jsonCOVID = jsonInfo.getJSONObject("COVID");
+            JSONObject jsonProperties = jsonCOVID.getJSONObject("properties");
+            for (Iterator<String> it = jsonProperties.keys(); it.hasNext(); ) {
+                String item = it.next();
+                attributeTitle.add(item);
+                attributeDescription.add(jsonProperties.getString(item));
+            }
+            JSONArray jsonRelations = jsonCOVID.getJSONArray("relations");
+            for (int i = 0; i < jsonRelations.length(); i++)
+            {
+                relationTitle.add(jsonRelations.getJSONObject(i).getString("label"));
+                relationDescription.add(jsonRelations.getJSONObject(i).getString("relation"));
+                relationDirection.add(jsonRelations.getJSONObject(i).getBoolean("forward"));
+            }
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
     }
 }
