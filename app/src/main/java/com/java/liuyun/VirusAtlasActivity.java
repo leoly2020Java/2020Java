@@ -69,7 +69,7 @@ public class VirusAtlasActivity extends AppCompatActivity {
                 intent.putExtra("AttributeTitle", (Serializable) attributeTitle);
                 intent.putExtra("AttributeDescription", (Serializable) attributeDescription);
                 intent.putExtra("RelatedWord", (Serializable) relatedEntities);
-                
+
                 startActivity(intent);
             }
         });
