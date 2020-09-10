@@ -81,3 +81,60 @@ public class VirusScholarActivity extends AppCompatActivity {
         super.onDestroy();
     }
 }
+
+class ScholarData{
+    String name;
+    String position;
+    String affiliation;
+    String bio;
+    String edu;
+    List<Double> indices;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public String getAffiliation() {
+        return affiliation;
+    }
+
+    public void setAffiliation(String affiliation) {
+        this.affiliation = affiliation;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public String getEdu() {
+        return edu;
+    }
+
+    public void setEdu(String edu) {
+        this.edu = edu;
+    }
+
+    public List<Double> getIndices() {
+        return indices;
+    }
+
+    public void setIndices(List<Double> indices) {
+        this.indices = indices;
+    }
+}
