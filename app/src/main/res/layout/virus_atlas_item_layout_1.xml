@@ -14,7 +14,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/atlas_item_name"
+            android:id="@+id/atlas_item_name_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/app_name"
@@ -23,18 +23,19 @@
             android:textStyle="bold" />
 
         <ImageView
-            android:id="@+id/atlas_item_image"
+            android:id="@+id/atlas_item_image_1"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_weight="1"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
+            android:rotation="180"
             app:srcCompat="@drawable/back"
             app:tint="#FF9800"
             tools:srcCompat="@drawable/abc_vector_test" />
 
         <TextView
-            android:id="@+id/atlas_item_description"
+            android:id="@+id/atlas_item_description_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/app_name"

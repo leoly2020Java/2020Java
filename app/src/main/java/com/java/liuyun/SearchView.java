@@ -12,6 +12,7 @@ import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.CursorAdapter;
@@ -102,11 +103,11 @@ public class SearchView extends LinearLayout {
         searchSQLite = new SearchSQLite(context);
         query(""); //首先查询搜索历史记录
 
-        searchText.setOnKeyListener(new OnKeyListener() {
+        searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+            public boolean onEditorAction(TextView view, int i, KeyEvent keyEvent) {
                 //回车键查询
-                if (i == KeyEvent.KEYCODE_ENTER) {
+                if (i == EditorInfo.IME_ACTION_SEARCH) {
                     String keyWord = searchText.getText().toString();
                     //查询新闻
                     if (!(searchCallBack == null)) searchCallBack.SearchAction(keyWord);

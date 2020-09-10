@@ -25,6 +25,7 @@ public class VirusAtlasActivity extends AppCompatActivity {
     List<String> relationTitle = new ArrayList<>();
     List<String> relationDescription = new ArrayList<>();
     List<Boolean> relationDirection = new ArrayList<>();
+    List<String> directionString = new ArrayList<>();
     List<String> attributeTitle = new ArrayList<>();
     List<String> attributeDescription = new ArrayList<>();
     List<String> relatedEntities = new ArrayList<>();
@@ -64,11 +65,16 @@ public class VirusAtlasActivity extends AppCompatActivity {
                 intent.putExtra("Description", entityInfo.get(1));
                 intent.putExtra("RelationTitle", (Serializable) relationTitle);
                 intent.putExtra("RelationDescripton", (Serializable) relationDescription);
+                //传入字符串形式的direction
+                for(int i = 0; i < relationDirection.size(); i++) directionString.add(relationDirection.get(i).toString());
+                intent.putExtra("Direction", (Serializable) directionString);
+
                 intent.putExtra("AttributeTitle", (Serializable) attributeTitle);
                 intent.putExtra("AttributeDescription", (Serializable) attributeDescription);
                 intent.putExtra("RelatedWord", (Serializable) relatedEntities);
-                
+
                 startActivity(intent);
+
             }
         });
 

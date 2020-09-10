@@ -20,6 +20,8 @@ public class AtlasSpecificActivity extends AppCompatActivity {
     private ExpandableListView expandableListView;
     private List<String> categoryNames, categorySizes;
     private List<List<AtlasData>> altasItems; //改成AtlasData类（包含两个字符串）
+    private List<List<String>> direction;
+    private List<String> direc;
 
     public AtlasSpecificActivity() {
         categoryNames = new ArrayList<>();
@@ -54,6 +56,18 @@ public class AtlasSpecificActivity extends AppCompatActivity {
         altasItems.add(data2);
         altasItems.add(data3);
 
+
+
+        //获取方向
+        direction = new ArrayList<>();
+        direction.add(getIntent().getStringArrayListExtra("Direction"));
+        direc = new ArrayList<>();
+        for (int i = 0; i < s3.size(); i++) direc.add("null");
+        direction.add(direc);
+        direc = new ArrayList<>();
+        for (int i = 0; i < s5.size(); i++) direc.add("null");
+        direction.add(direc);
+
     }
 
     @Override
@@ -62,7 +76,7 @@ public class AtlasSpecificActivity extends AppCompatActivity {
         setContentView(R.layout.activity_atlas_specific);
         initView();
         expandableListView = (ExpandableListView) findViewById(R.id.atlas_expandable_list);
-        expandableListView.setAdapter(new AtlasExpandableListAdapter(categoryNames, categorySizes, altasItems));
+        expandableListView.setAdapter(new AtlasExpandableListAdapter(categoryNames, categorySizes, altasItems, direction));
         //设置分组的监听
         expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override

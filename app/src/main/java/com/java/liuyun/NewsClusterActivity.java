@@ -771,7 +771,7 @@ public class NewsClusterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_news_cluster);
         initView();
         expandableListView = (ExpandableListView) findViewById(R.id.cluster_expandable_list);
-        expandableListView.setAdapter(new AtlasExpandableListAdapter(categoryNames, categorySizes, atlasItems));
+        expandableListView.setAdapter(new ClusterExpandableListAdapter(categoryNames, categorySizes, atlasItems));
         //设置分组的监听
         expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
