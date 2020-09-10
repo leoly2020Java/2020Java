@@ -25,6 +25,7 @@ public class AtlasSpecificActivity extends AppCompatActivity {
         categoryNames = new ArrayList<>();
         categoryNames.add("关系");
         categoryNames.add("属性");
+        categoryNames.add("相关图谱");
     }
 
     public void initView() {
@@ -33,20 +34,25 @@ public class AtlasSpecificActivity extends AppCompatActivity {
         name.setText(getIntent().getStringExtra("Name"));
         description.setText(getIntent().getStringExtra("Description"));
         //接受传过来的4个list<String>，获取atlasItem的信息
-        List<String> s1, s2, s3, s4;
+        List<String> s1, s2, s3, s4, s5;
         s1 = getIntent().getStringArrayListExtra("RelationTitle");
         s2 = getIntent().getStringArrayListExtra("RelationDescripton");
         s3 = getIntent().getStringArrayListExtra("AttributeTitle");
         s4 = getIntent().getStringArrayListExtra("AttributeDescription");
+        //获取相关图谱
+        s5 = getIntent().getStringArrayListExtra("RelatedWord");
         categorySizes = new ArrayList<>();
         categorySizes.add(Integer.toString(s1.size()));
         categorySizes.add(Integer.toString(s3.size()));
-        List<AtlasData> data1 = new ArrayList<>(), data2 = new ArrayList<>();
+        categorySizes.add(Integer.toString(s5.size()));
+        List<AtlasData> data1 = new ArrayList<>(), data2 = new ArrayList<>(), data3 = new ArrayList<>();
         for (int i = 0; i < s1.size(); i++) data1.add(new AtlasData(s1.get(i), s2.get(i)));
         for (int i = 0; i < s3.size(); i++) data2.add(new AtlasData(s3.get(i), s4.get(i)));
+        for (int i = 0; i < s5.size(); i++) data3.add(new AtlasData(s5.get(i), ""));
         altasItems = new ArrayList<>();
         altasItems.add(data1);
         altasItems.add(data2);
+        altasItems.add(data3);
 
     }
 

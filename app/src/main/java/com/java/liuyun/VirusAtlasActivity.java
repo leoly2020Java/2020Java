@@ -30,13 +30,14 @@ public class VirusAtlasActivity extends AppCompatActivity {
                 
                 Intent intent = new Intent(VirusAtlasActivity.this, AtlasSpecificActivity.class);
 
-                //TODO:查询指定疫情图谱的以下6类信息
+                //TODO:查询指定疫情图谱的以下7类信息
                 // Name:图谱名称，直接写入intent
                 // Description:图谱描述，直接写入intent
                 // relationTitle:图谱每种关系的名称
                 // relationDescription:图谱每种关系的描述
                 // attributeTitle:图谱每种属性的名称
                 // attributeDescription:图谱每种属性的描述
+                // relatedWord:相关词汇
                 // [重要]要求：relationTitle.size()==relationDescription.size()，attributeTitle.size()==attributeDescription.size()
                 // 下面是一个例子
 
@@ -50,10 +51,14 @@ public class VirusAtlasActivity extends AppCompatActivity {
                 attributeTitle.add("潜伏期"); attributeTitle.add("鉴别诊断"); attributeTitle.add("基本传染指数");
                 List<String> attributeDescription = new ArrayList<>();
                 attributeDescription.add("1-14天，多为3-7天"); attributeDescription.add("主要与流感病毒、副流感病毒、腺病毒、呼吸道合胞病毒、鼻病毒、人偏肺病毒、SARS冠状病毒等其他已知病毒性肺炎鉴别，与肺炎支原体、衣原体肺炎及细菌性肺炎等鉴别。此外，还要与非感染性疾病，如血管炎、皮肌炎和机化性肺炎等鉴别。"); attributeDescription.add("2.2");
+                List<String> relatedWord = new ArrayList<>();
+                relatedWord.add("病毒"); relatedWord.add("冠状病毒");
+
                 intent.putExtra("RelationTitle", (Serializable) relationTitle);
                 intent.putExtra("RelationDescripton", (Serializable) relationDescription);
                 intent.putExtra("AttributeTitle", (Serializable) attributeTitle);
                 intent.putExtra("AttributeDescription", (Serializable) attributeDescription);
+                intent.putExtra("RelatedWord", (Serializable) relatedWord);
 
                 //intent.putExtra()
                 startActivity(intent);
