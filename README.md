@@ -19,3 +19,6 @@
 疫情图谱|√|美观|√
 疫情新闻聚类|√|美观|√
 知疫学者|√|美观|√
+
+数据来源：  
+https://github.com/AMinerOpen/covid_dashboard/blob/
