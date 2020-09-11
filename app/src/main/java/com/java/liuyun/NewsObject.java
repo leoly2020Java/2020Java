@@ -110,7 +110,7 @@ public class NewsObject extends LitePalSupport {
         try{
             String timeStr = jsonData.getString("date");
             LocalDateTime dt = LocalDateTime.parse(timeStr, DateTimeFormatter.RFC_1123_DATE_TIME);
-            publishTime = Date.from(dt.atZone(ZoneId.systemDefault()).toInstant());
+            publishTime = Date.from(dt.atZone(ZoneId.of("GMT")).toInstant());
         }catch (Exception e){
             publishTime = null;
             e.printStackTrace();
