@@ -103,11 +103,36 @@ public class SearchView extends LinearLayout {
         searchSQLite = new SearchSQLite(context);
         query(""); //首先查询搜索历史记录
 
+        /*
         searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView view, int i, KeyEvent keyEvent) {
                 //回车键查询
                 if (i == EditorInfo.IME_ACTION_SEARCH) {
+                    String keyWord = searchText.getText().toString();
+                    //查询新闻
+                    if (!(searchCallBack == null)) searchCallBack.SearchAction(keyWord);
+                    //更新搜索记录数据库
+                    boolean exist = hasData(keyWord);
+                    if (!exist) {
+                        insert(keyWord);
+                        query("");
+                    }
+                    //唤醒MainActivity
+                    Intent intent = new Intent();
+                    intent.putExtra("SearchKeyWord", searchText.getText());
+                    ((Activity)context).setResult(Activity.RESULT_OK, intent);
+                    ((Activity)context).finish();
+                }
+                return false;
+            }
+        });
+         */
+        searchText.setOnKeyListener(new OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                //回车键查询
+                if (i == KeyEvent.KEYCODE_ENTER && keyEvent.getAction() == KeyEvent.ACTION_UP) {
                     String keyWord = searchText.getText().toString();
                     //查询新闻
                     if (!(searchCallBack == null)) searchCallBack.SearchAction(keyWord);

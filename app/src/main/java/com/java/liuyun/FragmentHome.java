@@ -107,8 +107,6 @@ public class FragmentHome extends Fragment {
             }catch(Exception ignored){}
         }
 
-        Toast.makeText(getActivity(), "flush: newsList.size() = "+newsList.size(), Toast.LENGTH_SHORT).show(); //Debug
-
     }
 
     public void loadMore() {
@@ -156,8 +154,6 @@ public class FragmentHome extends Fragment {
             }catch(Exception ignored){}
         }
 
-        Toast.makeText(getActivity(), "loadMore: newsList.size() = "+newsList.size(), Toast.LENGTH_SHORT).show(); //Debug
-
     }
 
     @Override
@@ -196,7 +192,6 @@ public class FragmentHome extends Fragment {
             //上拉获取更多新闻
             @Override
             public void onLoadMore(final TwinklingRefreshLayout twinklingRefreshLayout) {
-                Toast.makeText(getActivity(), "onLoadMore", Toast.LENGTH_SHORT).show(); //Debug
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {

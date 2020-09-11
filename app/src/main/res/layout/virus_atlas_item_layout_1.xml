@@ -31,7 +31,7 @@
             android:paddingRight="5dp"
             android:rotation="180"
             app:srcCompat="@drawable/back"
-            app:tint="#FF9800"
+            app:tint="#F44336"
             tools:srcCompat="@drawable/abc_vector_test" />
 
         <TextView

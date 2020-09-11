@@ -80,15 +80,12 @@ public class MainActivity extends AppCompatActivity {
                         switch (item.getItemId()) {
                             case R.id.navigation_home:
                                 mainViewPager.setCurrentItem(fragmentId[0]);
-                                Toast.makeText(getApplicationContext(), "000 "+fragmentId[0]+mainViewPager.getCurrentItem(), Toast.LENGTH_SHORT).show(); //Debug
                                 break;
                             case R.id.navigation_virus_information:
                                 mainViewPager.setCurrentItem(fragmentId[1]);
-                                Toast.makeText(getApplicationContext(), "111 "+fragmentId[1]+mainViewPager.getCurrentItem(), Toast.LENGTH_SHORT).show(); //Debug
                                 break;
                             case R.id.navigation_person:
                                 mainViewPager.setCurrentItem(fragmentId[2]);
-                                Toast.makeText(getApplicationContext(), "222 "+fragmentId[2]+mainViewPager.getCurrentItem(), Toast.LENGTH_SHORT).show(); //Debug
                                 break;
                         }
                         mainActivity.invalidateOptionsMenu(); //调用onPrepareOptionsMenu，实现动态修改上边栏
@@ -114,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         int id = mainViewPager.getCurrentItem();
-        Toast.makeText(getApplicationContext(), "menu "+id, Toast.LENGTH_SHORT).show(); //Debug
         switch (id) {
             case 0:
                 menu.findItem(R.id.menu_search).setVisible(true);
@@ -163,13 +159,11 @@ public class MainActivity extends AppCompatActivity {
         if (data == null) return;
         if (requestCode == SEARCH_RESULT_CODE) {
             String keyWord = data.getStringExtra("KeyWord");
-            Toast.makeText(getApplicationContext(), "search: "+keyWord, Toast.LENGTH_SHORT).show(); //Debug
             fragmentHome.setKeyWord(keyWord);
         }
         if (requestCode == CATEGORY_RESULT_CODE) {
             categoryAddList = data.getStringArrayListExtra("AddList");
             categoryDeleteList = data.getStringArrayListExtra("DeleteList");
-            Toast.makeText(getApplicationContext(), "category finish: "+categoryAddList.size()+" "+categoryDeleteList.size(), Toast.LENGTH_SHORT).show(); //Debug
             fragmentHome.setCategoryItemList(categoryAddList);
         }
         super.onActivityResult(requestCode, resultCode, data);

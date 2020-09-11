@@ -40,7 +40,6 @@ public class VirusAtlasActivity extends AppCompatActivity {
             @Override
             public void SearchAction(String keyWord) {
                 //打开新的Activity，显示疫情图谱
-                Toast.makeText(getApplicationContext(), "Altas search: "+keyWord, Toast.LENGTH_SHORT).show(); //Debug
 
                 VirusAtlasThread virusAtlasThread = new VirusAtlasThread();
                 virusAtlasThread.setKeyWord(keyWord);

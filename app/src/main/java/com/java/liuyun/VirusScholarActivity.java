@@ -74,7 +74,6 @@ public class VirusScholarActivity extends AppCompatActivity {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 ScholarData scholarData = scholarItems.get(groupPosition).get(childPosition); //学者名称：如“钟南山”
-                Toast.makeText(getApplicationContext(), "Scholar name: "+scholarData.name, Toast.LENGTH_SHORT).show(); //Debug
 
                 Intent intent = new Intent(VirusScholarActivity.this, ScholarContentActivity.class);
                 intent.putExtra("Name", scholarData.name);
