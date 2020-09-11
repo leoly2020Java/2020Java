@@ -50,6 +50,7 @@ public class AtlasSpecificActivity extends AppCompatActivity {
                     image.setImageBitmap(BitmapFactory.decodeStream(url.openStream()));
                 } catch (Exception e) {
                     image.setImageBitmap(null);
+                    image.setVisibility(View.GONE);
                 }
             }
         };
@@ -111,7 +112,6 @@ public class AtlasSpecificActivity extends AppCompatActivity {
         expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                Toast.makeText(getApplicationContext(), "direction: "+direction.get(groupPosition).get(childPosition), Toast.LENGTH_SHORT).show(); //Debug
                 return true;
             }
         });
