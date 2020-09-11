@@ -112,39 +112,32 @@ public class AtlasExpandableListAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         ChildViewHolder childViewHolder;
 
-        if (direction.get(groupPosition).get(childPosition).equals("true")) { //true
-            if (convertView==null){
-                convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.virus_atlas_item_layout_1,parent,false);
-                childViewHolder = new ChildViewHolder();
-                childViewHolder.title = (TextView)convertView.findViewById(R.id.atlas_item_name_1);
-                childViewHolder.descr = (TextView)convertView.findViewById(R.id.atlas_item_description_1);
-                childViewHolder.image = (ImageView)convertView.findViewById(R.id.atlas_item_image_1);
-                convertView.setTag(childViewHolder);
-            }else {
-                childViewHolder = (ChildViewHolder) convertView.getTag();
-            }
+        if (direction.get(groupPosition).get(childPosition).equals("false")) { //false
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.virus_atlas_item_layout_1,parent,false);
+            childViewHolder = new ChildViewHolder();
+            childViewHolder.title = (TextView)convertView.findViewById(R.id.atlas_item_name_1);
+            childViewHolder.descr = (TextView)convertView.findViewById(R.id.atlas_item_description_1);
+            childViewHolder.image = (ImageView)convertView.findViewById(R.id.atlas_item_image_1);
+            convertView.setTag(childViewHolder);
+
             childViewHolder.title.setText(childString.get(groupPosition).get(childPosition).title);
             childViewHolder.descr.setText(childString.get(groupPosition).get(childPosition).descr);
             childViewHolder.image.setVisibility(childViewHolder.image.VISIBLE);
             return convertView;
         }
 
-        if (convertView==null){
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.virus_atlas_item_layout,parent,false);
-            childViewHolder = new ChildViewHolder();
-            childViewHolder.title = (TextView)convertView.findViewById(R.id.atlas_item_name);
-            childViewHolder.descr = (TextView)convertView.findViewById(R.id.atlas_item_description);
-            childViewHolder.image = (ImageView)convertView.findViewById(R.id.atlas_item_image);
-            convertView.setTag(childViewHolder);
+        convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.virus_atlas_item_layout,parent,false);
+        childViewHolder = new ChildViewHolder();
+        childViewHolder.title = (TextView)convertView.findViewById(R.id.atlas_item_name);
+        childViewHolder.descr = (TextView)convertView.findViewById(R.id.atlas_item_description);
+        childViewHolder.image = (ImageView)convertView.findViewById(R.id.atlas_item_image);
+        convertView.setTag(childViewHolder);
 
-        }else {
-            childViewHolder = (ChildViewHolder) convertView.getTag();
-        }
         childViewHolder.title.setText(childString.get(groupPosition).get(childPosition).title);
         childViewHolder.descr.setText(childString.get(groupPosition).get(childPosition).descr);
         if (direction.get(groupPosition).get(childPosition).equals("null")) { //null
             childViewHolder.image.setVisibility(childViewHolder.image.INVISIBLE);
-        } else { //false
+        } else { //true
             childViewHolder.image.setVisibility(childViewHolder.image.VISIBLE);
         }
         return convertView;

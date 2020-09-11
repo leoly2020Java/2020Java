@@ -55,13 +55,13 @@ public class VirusAtlasActivity extends AppCompatActivity {
                     virusAtlasThread.join();
                 }catch (Exception e)
                 {
-                    e.printStackTrace();
                 }
                 
                 Intent intent = new Intent(VirusAtlasActivity.this, AtlasSpecificActivity.class);
 
                 intent.putExtra("Name", entityInfo.get(0));
                 intent.putExtra("Description", entityInfo.get(1));
+                intent.putExtra("ImageURL", entityInfo.get(2));
                 intent.putExtra("RelationTitle", (Serializable) relationTitle);
                 intent.putExtra("RelationDescripton", (Serializable) relationDescription);
                 //传入字符串形式的direction
@@ -176,6 +176,7 @@ class VirusAtlasThread extends Thread{
                 entityInfo.remove(1);
                 entityInfo.add(jsonInfo.getString("zhwiki"));
             }
+            entityInfo.add(jsonEntity.getString("img"));
             JSONObject jsonCOVID = jsonInfo.getJSONObject("COVID");
             JSONObject jsonProperties = jsonCOVID.getJSONObject("properties");
             for (Iterator<String> it = jsonProperties.keys(); it.hasNext(); ) {

@@ -1,6 +1,7 @@
 package com.java.liuyun;
 
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
@@ -35,6 +36,7 @@ public class ScholarContentActivity extends AppCompatActivity {
         position = (TextView) findViewById(R.id.scholar_content_position);
         affiliation = (TextView) findViewById(R.id.scholar_content_affiliation);
         bio = (TextView) findViewById(R.id.scholar_content_bio);
+        bio.setMovementMethod(ScrollingMovementMethod.getInstance());
         edu = (TextView) findViewById(R.id.scholar_content_edu);
         name.setText(getIntent().getStringExtra("Name"));
         position.setText(getIntent().getStringExtra("Position"));

@@ -11,7 +11,8 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="50dp"
         android:text="name"
-        android:textSize="30sp" />
+        android:textColor="#9C27B0"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/scholar_content_category_size"
@@ -21,5 +22,6 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="10dp"
         android:text="20"
-        android:textSize="24sp" />
+        android:textColor="#9C27B0"
+        android:textSize="16sp" />
 </RelativeLayout>

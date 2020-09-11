@@ -1,14 +1,18 @@
 package com.java.liuyun;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +20,7 @@ import java.util.List;
 public class AtlasSpecificActivity extends AppCompatActivity {
 
     private TextView name;
+    private ImageView image;
     private TextView description;
     private ExpandableListView expandableListView;
     private List<String> categoryNames, categorySizes;
@@ -32,8 +37,28 @@ public class AtlasSpecificActivity extends AppCompatActivity {
 
     public void initView() {
         name = (TextView) findViewById(R.id.atlas_name);
+        image = (ImageView) findViewById(R.id.atlas_image);
         description = (TextView) findViewById(R.id.atlas_description);
         name.setText(getIntent().getStringExtra("Name"));
+        //设置图片
+        Runnable getImageRunnable = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String strURL = getIntent().getStringExtra("ImageURL");
+                    URL url = new URL(strURL);
+                    image.setImageBitmap(BitmapFactory.decodeStream(url.openStream()));
+                } catch (Exception e) {
+                    image.setImageBitmap(null);
+                }
+            }
+        };
+        Thread getImageThread = new Thread(getImageRunnable);
+        getImageThread.start();
+        try {
+            getImageThread.join();
+        }catch (Exception e){
+        }
         description.setText(getIntent().getStringExtra("Description"));
         //接受传过来的4个list<String>，获取atlasItem的信息
         List<String> s1, s2, s3, s4, s5;
@@ -55,8 +80,6 @@ public class AtlasSpecificActivity extends AppCompatActivity {
         altasItems.add(data1);
         altasItems.add(data2);
         altasItems.add(data3);
-
-
 
         //获取方向
         direction = new ArrayList<>();
@@ -88,6 +111,7 @@ public class AtlasSpecificActivity extends AppCompatActivity {
         expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                Toast.makeText(getApplicationContext(), "direction: "+direction.get(groupPosition).get(childPosition), Toast.LENGTH_SHORT).show(); //Debug
                 return true;
             }
         });

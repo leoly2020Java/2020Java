@@ -25,7 +25,7 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:text="TextView"
-        android:textColor="#2196F3" />
+        android:textColor="#F44336" />
 
     <TextView
         android:id="@+id/scholar_content_affiliation"
@@ -40,8 +40,10 @@
         android:id="@+id/scholar_content_bio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:maxLines="15"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
+        android:scrollbars="vertical"
         android:text="TextView" />
 
     <TextView

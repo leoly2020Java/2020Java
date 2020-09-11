@@ -16,7 +16,7 @@ public class FragmentVirusInformation extends Fragment {
     Button virusDataButton;
     Button virusAtlasButton;
     Button newsClusterButton;
-    Button virusScholarButton;
+    //Button virusScholarButton;
 
     @Override
     public void onCreate(@Nullable Bundle saveInstanceState) {
@@ -29,7 +29,7 @@ public class FragmentVirusInformation extends Fragment {
         virusDataButton = (Button) view.findViewById(R.id.virus_data_button);
         virusAtlasButton = (Button) view.findViewById(R.id.virus_atlas_button);
         newsClusterButton = (Button) view.findViewById(R.id.news_cluster_button);
-        virusScholarButton = (Button) view.findViewById(R.id.virus_scholar_button);
+        //virusScholarButton = (Button) view.findViewById(R.id.virus_scholar_button);
 
         //疫情数据（柱状图）跳转
         virusDataButton.setOnClickListener(new View.OnClickListener() {
@@ -61,6 +61,7 @@ public class FragmentVirusInformation extends Fragment {
             }
         });
 
+        /*
         //知疫学者跳转
         virusScholarButton.setOnClickListener(new View.OnClickListener() {
             Intent intent;
@@ -70,6 +71,7 @@ public class FragmentVirusInformation extends Fragment {
                 startActivity(intent);
             }
         });
+         */
 
         return view;
     }
