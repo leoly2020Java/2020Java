@@ -14,6 +14,6 @@
     <item
         android:id="@+id/navigation_person"
         android:icon="@android:drawable/ic_menu_myplaces"
-        android:title="@string/Person" />
+        android:title="@string/VirusScholar" />
 
 </menu>

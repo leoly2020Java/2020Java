@@ -56,6 +56,11 @@ public class VirusAtlasActivity extends AppCompatActivity {
                 }catch (Exception e)
                 {
                 }
+
+                if (entityInfo.size() == 0) {
+                    Toast.makeText(getApplicationContext(), "找不到图谱", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 
                 Intent intent = new Intent(VirusAtlasActivity.this, AtlasSpecificActivity.class);
 
