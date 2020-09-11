@@ -100,6 +100,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         });
         newsViewHolder.publishTime.setText(DateUtils.getRelativeTimeSpanString(newsViewHolder.newsAbstractObject.getPublishTime().getTime()));
         newsViewHolder.type.setText(newsViewHolder.newsAbstractObject.getType());
+        newsViewHolder.source.setText(newsViewHolder.newsAbstractObject.getSource());
     }
 
     @Override
@@ -113,6 +114,7 @@ class NewsViewHolder extends RecyclerView.ViewHolder
     TextView title;
     TextView publishTime;
     TextView type;
+    TextView source;
     NewsAbstractObject newsAbstractObject;
     NewsViewHolder(View itemView)
     {
@@ -120,5 +122,6 @@ class NewsViewHolder extends RecyclerView.ViewHolder
         title = (TextView) itemView.findViewById(R.id.newsTitle);
         publishTime = (TextView) itemView.findViewById(R.id.newsPublishTime);
         type = (TextView) itemView.findViewById(R.id.newsType);
+        source = (TextView) itemView.findViewById(R.id.newsSource);
     }
 }

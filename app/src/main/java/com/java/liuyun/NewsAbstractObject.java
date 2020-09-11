@@ -15,6 +15,7 @@ public class NewsAbstractObject extends LitePalSupport {
     String type;
     String title;
     Date publishTime;
+    String source;
     NewsObject detailNews;
 
     public NewsObject getDetailNews() {
@@ -57,6 +58,14 @@ public class NewsAbstractObject extends LitePalSupport {
         this.publishTime = publishTime;
     }
 
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
     public NewsAbstractObject()
     {
         super();
@@ -83,12 +92,18 @@ public class NewsAbstractObject extends LitePalSupport {
         }
 
         try{
+            source = jsonData.getString("source");
+        }catch (Exception e)
+        {
+            source = "";
+        }
+
+        try{
             String timeStr = jsonData.getString("date");
             LocalDateTime dt = LocalDateTime.parse(timeStr, DateTimeFormatter.RFC_1123_DATE_TIME);
             publishTime = Date.from(dt.atZone(ZoneId.systemDefault()).toInstant());
         }catch (Exception e){
             publishTime = null;
-            e.printStackTrace();
         }
 
     }

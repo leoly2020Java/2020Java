@@ -8,11 +8,31 @@
 
     -<LinearLayout android:orientation="horizontal" android:layout_height="wrap_content" android:layout_width="match_parent" android:paddingRight="10dp" android:paddingTop="10dp" android:paddingLeft="10dp">
 
-    <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:textColor="@color/NewsListFootnote" android:id="@+id/newsPublishTime"/>
+        <TextView
+            android:id="@+id/newsPublishTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColor="@color/NewsListFootnote" />
 
-    <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:textColor="@color/NewsListFootnote" android:id="@+id/newsType"/>
+        <TextView
+            android:id="@+id/newsType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColor="@color/NewsListFootnote" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/newsSource"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp" />
+
+    </LinearLayout>
 
 </LinearLayout>
 
